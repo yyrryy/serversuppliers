@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <meta content="telephone=no" name="format-detection" />
+    <!-- favicon -->
+    <link href="{% static 'logos/favicon.jpg'%}" rel="icon" />
+    {% block meta %}
+    {% endblock %}
+    {% if title %}
+    <title>{{title}} - IBRA</title>
+    {% else %}
+    <title>Catalogue</title>
+    {% endif %}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i" rel="stylesheet" />
+    <!-- css -->
+    <script src="{% static 'js/jquery.min.js'%}"></script>
+    <link href="{% static 'css/minified.css'%}" rel="stylesheet" />
+</head>
+<body class="container">
+	<div class="mt-5"><input class="form-control password" placeholder="PassWord"></div> 
+	<table class="table table-bordered mt-5">
+		<tr>
+			<td>Source</td>
+			<td>Client</td>
+			<td>Total</td>
+		</tr>
+		{% for i in orders %}
+			<tr>
+				<td>{% if i.isclientcommnd %}{{i.client}}{% else %} {{i.salseman}} {% endif %}</td>
+				<td>{{i.client}}</td>
+				<td>{{i.total}}</td>
+				<td><button class="btn btn-info" onclick="sendcommande(event, '{{i.id}}')">Envoyer</button></td>
+			</tr>
+		{% endfor %}
+	</table>
+	<script>
+		function sendcommande(event, orderid){
+			let password=$('.password').val()
+			if (password!=''){
+				$(event.target).addClass('disabled')
+				$.get('/sendordertoserver', {
+					'orderid':orderid
+				}, (data)=>{
+					console.log(data)
+					if (data.success){
+						$(event.target).parent().parent().remove()
+					}else{
+						$(event.target).removeClass('disabled')
+					}
+				}
+				)
+				console.log(password)
+			}
+		}
+	</script>
+
+</body>
+
+</html>

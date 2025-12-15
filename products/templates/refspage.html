@@ -1,0 +1,26 @@
+		{% for i in refs %}
+		<tr>
+			<td>
+				{{i.lastdate|date:'d/m/Y'}}
+			</td>
+			<td>
+				{{i.ref}}
+			</td>
+			<td>
+				{{i.times}}
+			</td>
+			<td>
+				{{i.user.client.name}}{{i.user.represent.name}}
+			</td>
+			<td> <button class="btn btn-danger" onclick="deletsearchedref(event, '{{i.id}}')">X</button> </td>
+		</tr>
+		{% endfor %}
+<script>
+	function deletsearchedref(event, refid){
+		$.get('/products/deletsearchedrefserver', {
+			'refid':refid
+		}, (data)=>{
+			$(event.target).parent().parent().remove()
+		})
+	}
+</script>

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="options bg-white d-flex justify-content-between">
+    <div class="col-3">
+        <h5>
+            Situation Client BL
+        </h5>
+        <select name="clientsituationselect" id="" class="clientsituationselect form-select notempty" style="width: 100%;">
+            
+        </select>
+
+        <div class="mt-2">
+            <div>
+                <small>Du</small>
+                <input type="date" name="situationcldatefrom" class="situationcldatefrom form-control notempty" value="{{today|date:'Y-m-d'}}">
+            </div>
+            <div>
+                <small>Au</small>
+                <input type="date" name="situationcldateto" class="situationcldateto form-control notempty" value="{{today|date:'Y-m-d'}}">
+            </div>
+        </div>
+        
+        <button class="btn btn-info w-100 mt-2" onclick="genererrelvecl(event)">Relevé</button>
+        <strong class="soldfcinrelvbl text-danger"></strong>
+    	<button class="btn btn-success w-100 mt-2 bg-orange" onclick="relvclfcinbl(event)">Relevé Facture</button>
+    </div>
+    <div class="col-3">
+	<button class="btn btn-success w-100 mt-2 printrelvebl" onclick="printsituationbl('releveclblholder')">Imprimer</button>
+        <button class="btn btn-primary w-100 mt-2 printrelvebl" onclick="$('header').toggleClass('d-none'); $('.options').toggleClass('d-none')">Entette</button>
+	</div>
+</div>
+    <div class="me-2 releveclblholder" id="releveclblholder" >
+        <div class="d-flex flex-column align-items-center justify-content-center loader position-fixed d-none"
+        style="height: 100%;background:#171717bc ; width: 100%; z-index: 9999;"
+        >
+            <div class="spinner-border text-white" role="status">
+            </div>
+        </div>
+    </div>
+ <script src="{% static 'js/select2.min.js'%}"></script>
+
+<script>
+    // the same function relv client facture in bl
+    function relvclfcinbl(event){
+
+        parentdiv=$(event.target).parent()
+        console.log(parentdiv)
+        clientid=parentdiv.find('select[name="clientsituationselect"]').val()
+        datefrom=parentdiv.find('input[name="situationcldatefrom"]').val()
+        dateto=parentdiv.find('input[name="situationcldateto"]').val()
+
+	 //clientid=parentdiv.find('select[name="clientsituationselect"]').val()
+        //datefrom=parentdiv.find('input[name="situationfccldatefrom"]').val()
+        //dateto=parentdiv.find('input[name="situationfccldateto"]').val()
+        if (clientid==null || datefrom=='' || dateto==''){
+          alertify.error('ERRO')
+          return
+        }
+        $('.loadingscreen').removeClass('d-none')
+        $.ajax({
+            url: '/products/relevclientfc',
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                'clientid': clientid,
+                'datefrom': datefrom,
+                'dateto': dateto,
+            },
+            success: function(data){
+                $('.loadingscreen').addClass('d-none')
+                $('.releveclblholder').html(data.html)
+            }
+        })
+    }
+    function genererrelvecl(event){
+        parentdiv=$(event.target).parent()
+        console.log(parentdiv)
+        clientid=parentdiv.find('select[name="clientsituationselect"]').val()
+        datefrom=parentdiv.find('input[name="situationcldatefrom"]').val()
+        dateto=parentdiv.find('input[name="situationcldateto"]').val()
+        if (clientid==null || datefrom=='' || dateto==''){
+          alertify.error('ERRO')
+          return
+        }
+        $('.loader').removeClass('d-none')
+        $.ajax({
+            url: '/products/relevclient',
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                'clientid': clientid,
+                'datefrom': datefrom,
+                'dateto': dateto,
+            },
+            success: function(data){
+                $('.loader').addClass('d-none')
+                $('.releveclblholder').html(data.html)
+                $('.soldfcinrelvbl').text('Sold Facture: '+data.soldfc)
+                // dateInput.value = currentDate;
+            }
+        })
+    }
+    $(function(){
+      $('.clientsituationselect').select2({
+        minimumInputLength: 1,
+        placeholder:'Chercher',
+        ajax: {
+          type:'get',
+          dataType: 'json',
+          url: '/products/searchclientrep',
+          data: function (params) {
+            var query = {
+              term: params.term,
+            }
+            // Query parameters will be ?search=[term]&type=public
+            return query;
+          },
+          proccessresults: function (data) {
+              return {
+                results:data.results
+              }
+          },
+          cache:true
+        }
+      });
+      
+    })
+    
+    function printsituationbl(id){
+        var printContents = document.getElementById(id).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+    //  $('.bgfacture').css({
+    //   "position": "absolute !important",
+    //   "right": "26em",
+    //   "opacity": "0.18",
+    //   "top": "23em",
+    //  })
+	$('.options').remove()
+        $('header').remove()
+	parentdiv.find('table').css('font-size', '13px')
+        parentdiv.find('body').css('font-family', 'serif')
+        parentdiv.find("table > tbody > tr > td").css('padding', '0px');
+        parentdiv.find("table > thead > tr").css('background','gray');
+        // $('body').addClass('d-flex flex-column vh-100 p-3')
+        window.print();
+        document.body.innerHTML = originalContents;
+       	location.reload() 
+    }
+</script>
+{% endblock %}
