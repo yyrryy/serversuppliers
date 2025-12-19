@@ -44,6 +44,8 @@ class Produit(models.Model):
     block=models.CharField(max_length=500, null=True, default=None)
     # code = classement
     code=models.CharField(max_length=500, null=True)
+    #this iniqcide will be used to match local products with server products
+    uniqcode=models.CharField(max_length=500, null=True)
     coderef=models.CharField(max_length=500, null=True, default=None)
     #price
     buyprice= models.FloatField(default=None, null=True, blank=True)
@@ -66,7 +68,8 @@ class Produit(models.Model):
     stockprincipal=models.IntegerField(default=None, null=True, blank=True)
     stockdepot=models.IntegerField(default=None, null=True, blank=True)
     stocktotal=models.IntegerField(default=None, null=True, blank=True)
-    stockfacture=models.IntegerField(default=None, null=True, blank=True)
+    stockinitial=models.IntegerField(default=0, null=True, blank=True)
+    stockfacture=models.IntegerField(default=0, null=True, blank=True)
     stockbon=models.IntegerField(default=None, null=True, blank=True)
     # stock=models.BooleanField(default=True)
     # add equivalent in refs
@@ -74,6 +77,7 @@ class Produit(models.Model):
     famille=models.CharField(max_length=500, default=None, null=True, blank=True)
     cars=models.TextField(default=None, null=True, blank=True)
     #ref
+    newfob=models.FloatField(default=0, null=True, blank=True)
     ref=models.CharField(max_length=50)
     diametre=models.CharField(max_length=500, default=None, null=True, blank=True)
 
@@ -84,11 +88,14 @@ class Produit(models.Model):
     mark=models.ForeignKey(Mark, on_delete=models.CASCADE, default=None, null=True, blank=True)
     #cartgrise
     # n_chasis=models.CharField(max_length=50, null=True)
+    # minstock is used to indicate the quantity being shipped now
     minstock=models.IntegerField(default=None, null=True, blank=True)
-    carlogos=models.ForeignKey(Carlogos, default=None, blank=True, null=True, on_delete=models.CASCADE)
+    carlogos=models.ManyToManyField(Carlogos, default=None, blank=True)
     # min cmmand
     isnew=models.BooleanField(default=False)
+    # use min to indicate the quantity commandé
     min=models.IntegerField(default=1, null=True, blank=True)
+    qtycommande=models.IntegerField(default=0, null=True, blank=True)
     isoffer=models.BooleanField(default=False)
     offre=models.CharField(max_length=500, default=None, null=True, blank=True)
     category=models.ForeignKey(Category,on_delete=models.CASCADE, default=None, null=True, blank=True)
@@ -97,6 +104,9 @@ class Produit(models.Model):
     iscommanded=models.BooleanField(default=False)
     suppliercommand=models.ForeignKey('Supplier', on_delete=models.CASCADE, default=None, null=True, blank=True, related_name='suppliercommand')
     near=models.BooleanField(default=False)
+    # adashi code is the exact code, eq is equivalent update1: adashi code will be used as the categry holder (assambly)
+    adashicode=models.CharField(max_length=500, default=None, null=True, blank=True)
+    adashieq=models.CharField(max_length=500, default=None, null=True, blank=True)
     # stock facture
     # stock bon
     def __str__(self) -> str:
