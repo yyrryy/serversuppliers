@@ -53,7 +53,7 @@ class Produit(models.Model):
     sellprice=models.FloatField(default=None, null=True, blank=True)
     sellpricebrut=models.FloatField(default=None, null=True, blank=True)
     coutmoyen=models.FloatField(default=None, null=True, blank=True)
-    remise=models.IntegerField(default=35, null=True, blank=True)
+    remise=models.IntegerField(default=0, null=True, blank=True)
     #checkprice= models.FloatField(default=None, null=True, blank=True)
     prixnet=models.FloatField(default=None, null=True, blank=True)
     devise=models.FloatField(default=None, null=True, blank=True)
@@ -145,7 +145,7 @@ class Produit(models.Model):
         
     def getcars(self):
         try:
-            return json.loads(self.cars)
+            return self.cars.split(',')
         except:
             return []
     # brand=models.CharField(max_length=25, default=None)
@@ -154,7 +154,28 @@ class Produit(models.Model):
     
 # cupppon codes table
 
-
+class YearEndStock(models.Model):
+    product = models.ForeignKey(Produit, on_delete=models.CASCADE, related_name="year_end_stocks")
+    ref=models.CharField(max_length=500, null=True)
+    stocktotal = models.IntegerField(default=0, null=True, blank=True)
+    stockfacture = models.IntegerField(default=0, null=True, blank=True)
+    date = models.DateTimeField()
+    name=models.CharField(max_length=500, null=True)
+    # code = classement
+    #price
+    buyprice= models.FloatField(default=None, null=True, blank=True)
+    supplier=models.CharField(max_length=500, null=True)
+    sellprice=models.FloatField(default=None, null=True, blank=True)
+    sellpricebrut=models.FloatField(default=None, null=True, blank=True)
+    coutmoyen=models.FloatField(default=None, null=True, blank=True)
+    remise=models.IntegerField(default=0, null=True, blank=True)
+    #checkprice= models.FloatField(default=None, null=True, blank=True)
+    prixnet=models.FloatField(default=None, null=True, blank=True)
+    devise=models.FloatField(default=None, null=True, blank=True)
+class Damagedproducts(models.Model):
+    product=models.ForeignKey(Produit, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    qty=models.IntegerField(default=0)
+    date=models.DateField(auto_now_add=True)
 
 class Attribute(models.Model):
     product=models.ForeignKey(Produit, on_delete=models.CASCADE, default=None)
@@ -172,7 +193,10 @@ class Supplier(models.Model):
 
 
 
+
 class Itemsbysupplier(models.Model):
+    #is manual will indicate if this bon achat is manual
+    ismanual=models.BooleanField(default=False)
     supplier= models.ForeignKey(Supplier, on_delete=models.CASCADE, default=None, null=True, blank=True, related_name='provider')
     date = models.DateTimeField(default=None)
     #date saisie
@@ -191,18 +215,27 @@ class Stockin(models.Model):
     product=models.ForeignKey(Produit, on_delete=models.CASCADE, default=None)
     date=models.DateField()
     quantity=models.IntegerField()
+    ref=models.CharField(max_length=500, default=None, null=True, blank=True)
+    name=models.CharField(max_length=500, default=None, null=True, blank=True)
     price=models.FloatField(default=0.00)
     devise=models.FloatField(default=0.00)
     # to delete stock facture is stock in is facture
+    # to delete stock facture is stock in is facture
     facture=models.BooleanField(default=False)
+    facture=models.BooleanField(default=False)
+    # to track ligns that will be inventaire (stock stsem 8 stock reel 10, 2 is difference, 2 needs to be inventaire here adkchmnt 4stock s stockin line)
+    isinventaire=models.BooleanField(default=False)
+    # qtyofprice will be used to track qty of this price
     # qtyofprice will be used to track qty of this price
     qtyofprice=models.IntegerField(default=0)
     remise=models.IntegerField(default=0)
     total=models.FloatField(default=0.00)
-    supplier=models.ForeignKey(Supplier, on_delete=models.CASCADE, default=None)
+    supplier=models.ForeignKey(Supplier, on_delete=models.CASCADE, default=None, null=True, blank=True)
     nbon=models.ForeignKey(Itemsbysupplier, on_delete=models.CASCADE, default=None, null=True, blank=True)
     isavoir=models.BooleanField(default=False)
     avoir=models.ForeignKey('Avoirclient', on_delete=models.CASCADE, default=None, null=True, blank=True)
+    def __str__(self) -> str:
+        return f'{self.nbon} - {self.product}'
 class Pricehistory(models.Model):
     date=models.DateField()
     product=models.ForeignKey(Produit, on_delete=models.CASCADE, default=None)
@@ -220,7 +253,10 @@ class Region(models.Model):
 class Client(models.Model):
     represent=models.ForeignKey('Represent', on_delete=models.CASCADE, default=None, null=True, related_name="repclient")
     user = models.OneToOneField(User, on_delete=models.SET_NULL, default=None, null=True)
+    moderegl=models.CharField(max_length=200, default=0, null=True, blank=True)
     name=models.CharField(max_length=200)
+    name=models.CharField(max_length=200)
+    clientname=models.CharField(max_length=200, null=True, default=None, blank=True)
     code=models.CharField(max_length=200, null=True, default=None)
     ice=models.CharField(max_length=200, null=True, default=None)
     city=models.CharField(max_length=200, null=True, default=None)
@@ -230,16 +266,16 @@ class Client(models.Model):
     soldbl=models.FloatField(default=0.00, null=True, blank=True)
     soldfacture=models.FloatField(default=0.00, null=True, blank=True)
     address=models.CharField(max_length=200)
+    location=models.TextField(default='', null=True, blank=True)
     phone=models.CharField(max_length=200, default=None, null=True)
+    phone2=models.CharField(max_length=200, default=None, null=True)
     diver=models.BooleanField(default=False)
     accesscatalog=models.BooleanField(default=False)
-    def __str__(self) -> str:
-        return self.name+'-'+str(self.city)
-
 class Represent(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, default=None, null=True)
     name=models.CharField(max_length=50)
     phone=models.CharField(max_length=50, default=None, null=True)
+    phone2=models.CharField(max_length=50, default=None, null=True)
     region=models.CharField(max_length=100, default=None, null=True)
     image = models.ImageField(upload_to='slasemen_imags/', null=True, blank=True)
     caneditprice=models.BooleanField(default=False)
@@ -288,7 +324,10 @@ class Order(models.Model):
         super().save(*args, **kwargs)  #
 
 
+	
 class Bonlivraison(models.Model):
+    iscontre=models.BooleanField(default=False)
+    paymenttype=models.CharField(max_length=50, null=True, default='simple')
     commande=models.ForeignKey(Order, on_delete=models.SET_NULL, default=None, null=True, blank=True)
     date = models.DateTimeField(default=datetime.datetime.now, blank=True, null=True)
     client=models.ForeignKey(Client, on_delete=models.SET_NULL, default=None, null=True, blank=True)
@@ -315,13 +354,19 @@ class Bonlivraison(models.Model):
     def __str__(self) -> str:
         return self.bon_no
 
+		
 class Facture(models.Model):
+    #hascopy means there is a copy
+    iscontre=models.BooleanField(default=False)
+    hascopy=models.BooleanField(default=False)
+    copynumber=models.CharField(max_length=50, null=True, default=None)
     bon=models.ForeignKey(Bonlivraison, on_delete=models.SET_NULL, default=None, blank=True, null=True)
     date = models.DateTimeField(default=datetime.datetime.now, blank=True, null=True)
     code=models.CharField(max_length=50, null=True, default=None)
     total=models.FloatField(default=0.00)
     tva=models.FloatField(default=0.00)
     rest=models.FloatField(default=0.00)
+    printed = models.BooleanField(default=False)
     ispaid=models.BooleanField(default=False)
     facture_no=models.CharField(max_length=50, null=True, default=None)
     client=models.ForeignKey(Client, on_delete=models.SET_NULL, default=None, null=True)
@@ -338,7 +383,6 @@ class Facture(models.Model):
         super().save(*args, **kwargs)
 
 
-
 class PaymentSupplier(models.Model):
     supplier=models.ForeignKey(Supplier, on_delete=models.CASCADE, default=None)
     date = models.DateTimeField(default=None)
@@ -350,7 +394,11 @@ class PaymentSupplier(models.Model):
     npiece=models.CharField(max_length=50, default=None, null=True, blank=True)
 
 
-
+class Notesrepresentant(models.Model):
+    represent=models.ForeignKey('Represent', on_delete=models.SET_NULL, default=None, null=True)
+    note=models.TextField()
+    def __str__(self) -> str:
+        return self.represent.name
 
 
 class PaymentClientbl(models.Model):
@@ -367,6 +415,8 @@ class PaymentClientbl(models.Model):
     usedinfacture=models.BooleanField(default=False)
     # if regl is paid if it has echeaance
     ispaid=models.BooleanField(default=False)
+    #refused means impyé
+    refused=models.BooleanField(default=False)
 
 class Bonsregle(models.Model):
     payment=models.ForeignKey(PaymentClientbl, on_delete=models.CASCADE, default=None, null=True, blank=True)
@@ -387,6 +437,8 @@ class PaymentClientfc(models.Model):
     npiece=models.CharField(max_length=50, default=None, null=True, blank=True)
     # if regl is paid if it has echeaance
     ispaid=models.BooleanField(default=False)
+    #refused means impyé
+    refused=models.BooleanField(default=False)
 
 class Facturesregle(models.Model):
     payment=models.ForeignKey(PaymentClientfc, on_delete=models.CASCADE, default=None, null=True, blank=True)
@@ -493,6 +545,7 @@ class Livraisonitem(models.Model):
     
     # to track ligns that are facture
     isfacture=models.BooleanField(default=False)
+    isinventaire=models.BooleanField(default=False)
     isavoir=models.BooleanField(default=False)
     clientprice=models.FloatField(default=0.00)
     date=models.DateField(default=None, null=True, blank=True)
@@ -520,11 +573,17 @@ class Avoirclient(models.Model):
     total = models.FloatField(default=0, blank=True, null=True)
     avoirbl=models.BooleanField(default=False)
     avoirfacture=models.BooleanField(default=False)
-
+    avoirsystem=models.BooleanField(default=True)
+    note=models.TextField(default=None, null=True, blank=True)
 
 
 class Returned(models.Model):
     product=models.ForeignKey(Produit, on_delete=models.CASCADE, default=None)
+    # ref of the article, cause it can be modified
+    ref=models.CharField(max_length=500, default='-', null=True, blank=True)
+    source=models.CharField(max_length=500, default='', null=True, blank=True)
+    # name of the article, cause it can be modified
+    name=models.TextField(default='-', null=True, blank=True)
     qty=models.IntegerField()
     remise=models.IntegerField(null=True, blank=True, default=None)
     total=models.FloatField(default=0.00)
@@ -554,9 +613,14 @@ class Avoirsupplier(models.Model):
 
 class Returnedsupplier(models.Model):
     product=models.ForeignKey(Produit, on_delete=models.CASCADE, default=None)
+    # ref of the article, cause it can be modified
+    ref=models.CharField(max_length=500, default='-', null=True, blank=True)
+    # name of the article, cause it can be modified
+    name=models.TextField(default='-', null=True, blank=True)
     qty=models.IntegerField()
     total=models.FloatField(default=0.00)
     price=models.FloatField(default=0.00)
+    remise=models.IntegerField(null=True, blank=True, default=None)
     avoir=models.ForeignKey(Avoirsupplier, related_name='avoir_supplier', on_delete=models.CASCADE, default=None, null=True, blank=True)
 
 
@@ -614,6 +678,21 @@ class Cartitems(models.Model):
     def __str__(self) -> str:
         return f'{self.cart.user} {self.product.ref}'
 
+	
+class Repcart(models.Model):
+    rep=models.ForeignKey(Represent, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    client=models.ForeignKey(Client, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    total=models.FloatField(default=None, null=True, blank=True)
+    def __str__(self) -> str:
+        return self.rep.name+' '+str(self.client.name)+' '+str(self.total)
+class Repcartitem(models.Model):
+    repcart=models.ForeignKey(Repcart, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    product=models.ForeignKey(Produit, on_delete=models.CASCADE, default=None)
+    qty=models.IntegerField(default=None, null=True, blank=True)
+    total=models.FloatField(default=None, null=True, blank=True)
+    def __str__(self) -> str:
+        return self.product.ref
+
 class Wich(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     total=models.FloatField(default=None, null=True, blank=True)
@@ -631,3 +710,124 @@ class Wishlist(models.Model):
 
 class Notification(models.Model):
     notification=models.TextField()
+
+class Modifierstock(models.Model):
+    date=models.DateField(auto_now_add=True)
+    product=models.ForeignKey(Produit, default=None, null=True, blank=True, on_delete=models.SET_NULL)
+    stock=models.IntegerField(default=0)
+    stockfc=models.BooleanField(default=False)
+class Achathistory(models.Model):
+    date=models.DateField()
+    fournisseur=models.TextField()
+    designation=models.TextField()
+    ref=models.TextField()
+    famille=models.TextField()
+    quantity=models.IntegerField()
+    prixunitaire=models.TextField()
+    mantant=models.TextField()
+    devise=models.TextField()
+    total=models.FloatField(default=0.00)
+class Excelecheances(models.Model):
+    #month should be 09/2024
+    month=models.CharField(max_length=500, default=None, null=True, blank=True)
+    npiece=models.CharField(max_length=500, default=None, null=True, blank=True)
+    mode=models.CharField(max_length=500, default=None, null=True, blank=True)
+    echeance=models.CharField(max_length=500, default=None, null=True, blank=True)
+    # note xill hold anything
+    note=models.TextField(max_length=500, default=None, null=True, blank=True)
+    client=models.CharField(max_length=500, default=None, null=True, blank=True)
+    clientcode=models.CharField(max_length=500, default=None, null=True, blank=True)
+    factures=models.TextField(default=None, null=True, blank=True)
+    # id is enough # no id is not enqugh cause id cannot be shared between multiple records (2)
+    # code is for grouping the lines that will have a total (multiple payments in one total, you whould know which by this code, after user selects the lines that will be grouped in the same total) (1)
+    code=models.CharField(max_length=500, default=None, null=True, blank=True)
+    ispaid=models.BooleanField(default=False)
+    isimpye=models.BooleanField(default=False)
+    # it its printed in papres
+    isprinted=models.BooleanField(default=False)
+    # this will be used to track the factures that exist already before
+    iscontable=models.BooleanField(default=False)
+    # is empty if npiece has no factures, just got added manually
+    isempty=models.BooleanField(default=False)
+    #if factures are pointage (zrint 4 lpointaaaage)
+    ispointage=models.BooleanField(default=False)
+    grandtotal=models.FloatField(default=None, null=True, blank=True)
+    amount=models.FloatField(default=None, null=True, blank=True)
+    tva=models.FloatField(default=None, null=True, blank=True)
+    # if factures in factre input are account (comptabilisé)
+    facturesaccount=models.BooleanField(default=False)
+    def __str__(self) -> str:
+        return self.month if self.month else '--'
+class Tva(models.Model):
+    #month should be 09/2024
+    month=models.CharField(max_length=500, default=None, null=True, blank=True)
+    tvavente=models.FloatField(max_length=500, default=None, null=True, blank=True)
+    tvaachat=models.FloatField(max_length=500, default=None, null=True, blank=True)
+    # report means the amount paid
+    report=models.FloatField(default=0.00, null=True, blank=True)
+    rest=models.FloatField(default=0.00, null=True, blank=True)
+    restandtva=models.FloatField(default=0.00, null=True, blank=True)
+    # othertva will hold the real tva achat after substracting (-net)
+    othertvaachat=models.FloatField(max_length=500, default=None, null=True, blank=True)
+    # achat details will hold the tva achat entered
+    achatdetails=models.TextField(default=None, null=True, blank=True)
+    net=models.FloatField(max_length=500, default=None, null=True, blank=True)
+    def __str__(self) -> str:
+        return self.month
+class Etude(models.Model):
+    facture_no=models.CharField(max_length=500, default=None, null=True, blank=True)
+    # created at will be date saisie
+    created_at=models.DateField(auto_now_add=True)
+    # date will be facture date
+    date=models.DateField(default=None, null=True, blank=True)
+    supplier=models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True)
+    #facturedevise iga facture s $
+    facturedevise=models.FloatField()
+    tauxChange=models.CharField(max_length=500)
+    facturedh=models.FloatField()
+    # chargeandfacture will hold charges+facture
+    chargeandfacture=models.FloatField(default=0.00, null=True, blank=True)
+    cfr=models.FloatField(default=0.00, null=True, blank=True)
+    transportInternational=models.FloatField(default=0.00, null=True, blank=True)
+    dounane=models.FloatField(default=0.00, null=True, blank=True)
+    magazinage=models.FloatField(default=0.00, null=True, blank=True)
+    surrestaries=models.FloatField(default=0.00, null=True, blank=True)
+    transportCamion=models.FloatField(default=0.00, null=True, blank=True)
+    transitaire=models.FloatField(default=0.00, null=True, blank=True)
+    autre1=models.FloatField(default=0.00, null=True, blank=True)
+    autre2=models.FloatField(default=0.00, null=True, blank=True)
+    totalCharges=models.FloatField(default=0.00, null=True, blank=True)
+    tauxCharge=models.FloatField(default=0.00, null=True, blank=True)
+    # pattc * qty
+    pattcQty=models.FloatField(default=0.00, null=True, blank=True)
+    tdt=models.FloatField(default=0.00, null=True, blank=True)
+    tcharge=models.FloatField(default=0.00, null=True, blank=True)
+class EtudeItem(models.Model):
+    etude=models.ForeignKey(Etude, on_delete=models.CASCADE)
+    ref=models.CharField(max_length=500, default='--', null=True, blank=True)
+    name=models.CharField(max_length=1500, default='--', null=True, blank=True)
+    qty=models.CharField(max_length=500, default='--', null=True, blank=True)
+    devise=models.CharField(max_length=500, default='--', null=True, blank=True)
+    amount=models.CharField(max_length=500, default='--', null=True, blank=True)
+    dh=models.CharField(max_length=500, default='--', null=True, blank=True)
+    hs=models.CharField(max_length=500, default='--', null=True, blank=True)
+    dt=models.CharField(max_length=500, default='--', null=True, blank=True)
+    pattc=models.CharField(max_length=500, default='--', null=True, blank=True)
+    paht=models.CharField(max_length=500, default='--', null=True, blank=True)
+    coeff=models.CharField(max_length=500, default='--', null=True, blank=True)
+    pbrut=models.CharField(max_length=500, default='--', null=True, blank=True)
+    pnet=models.CharField(max_length=500, default='--', null=True, blank=True)
+    marge=models.CharField(max_length=500, default='--', null=True, blank=True)
+    tdt=models.CharField(max_length=500, default='--', null=True, blank=True)
+    tcharges=models.CharField(max_length=500, default='--', null=True, blank=True)
+class Setting(models.Model):
+    name=models.CharField(max_length=500, default=None, null=True, blank=True)
+    ice=models.CharField(max_length=500, default=None, null=True, blank=True)
+    rc=models.CharField(max_length=500, default=None, null=True, blank=True)
+    idfiscal=models.CharField(max_length=500, default=None, null=True, blank=True)
+    cnss=models.CharField(max_length=500, default=None, null=True, blank=True)
+    address=models.CharField(max_length=500, default=None, null=True, blank=True)
+    serverip=models.CharField(max_length=500, default=None, null=True, blank=True)
+    logo=models.ImageField(upload_to='logos/', null=True, blank=True)
+    logoheadfacture=models.ImageField(upload_to='logos/', null=True, blank=True)
+    logobodyfacture=models.ImageField(upload_to='logos/', null=True, blank=True)
