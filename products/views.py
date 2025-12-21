@@ -318,6 +318,7 @@ def viewoneproduct(request, id):
 
 def updateproduct(request):
     productid=request.POST.get('productid')
+    uniqcode=request.POST.get('uniqcode')
     new=request.POST.get('new')
     near=request.POST.get('near')
     logos=request.POST.get('logos', None)
@@ -325,7 +326,7 @@ def updateproduct(request):
     sellprice=request.POST.get('sellprice')
     netprice=request.POST.get('netprice')
     image = request.FILES.get('image')
-    product=Produit.objects.get(pk=productid)
+    product=Produit.objects.get(uniqcode=uniqcode)
     if float(sellprice) != float(product.sellprice):
         print('>>>>>>>>price changed', sellprice, product.sellprice, sellprice != product.sellprice)
         reliquas=Wishlist.objects.filter(product=product)
