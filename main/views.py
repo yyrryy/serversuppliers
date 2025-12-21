@@ -354,7 +354,7 @@ def home(request):
     #     if (request.user.groups.first().name=='admin'):
     #         return redirect('main:orders')
     # return redirect('main:loginpage')
-    return render(request, 'main.html', ctx)
+    return render(request, 'login.html', ctx)
 
 
 def about(request):
