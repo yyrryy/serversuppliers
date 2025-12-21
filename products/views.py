@@ -18,7 +18,7 @@ from django.utils import timezone
 import pandas as pd
 from itertools import chain
 from django.core.serializers import serialize
-import re
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 today = timezone.now().date()
 thisyear=timezone.now().year
@@ -89,7 +89,7 @@ def createcategory(request):
     return JsonResponse({
         'success':True
     })
-
+@csrf_exempt
 def updatecategory(request):
     
     id=request.POST.get('id')
@@ -130,7 +130,7 @@ def createmarque(request):
         })
     except Exception as e:
         print(">>>>>error", e)
-
+@csrf_exempt
 def updatemarque(request):
 
     id=request.POST.get('id')
@@ -315,7 +315,7 @@ def viewoneproduct(request, id):
         'repswithprice':commercial_prices
     }
     return render(request, 'viewoneproduct.html', ctx)
-
+@csrf_exempt
 def updateproduct(request):
     productid=request.POST.get('productid')
     uniqcode=request.POST.get('uniqcode')
