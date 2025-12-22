@@ -1240,8 +1240,8 @@ def listfactures(request):
 
 
 def activerproduct(request):
-    id=request.GET.get('id')
-    product=Produit.objects.get(pk=id)
+    uniqcode=request.GET.get('uniqcode')
+    product=Produit.objects.get(uniqcode=uniqcode)
     product.isactive=True
     product.save()
     return JsonResponse({
@@ -1249,8 +1249,8 @@ def activerproduct(request):
     })
 
 def desactiverproduct(request):
-    id=request.GET.get('id')
-    product=Produit.objects.get(pk=id)
+    uniqcode=request.GET.get('uniqcode')
+    product=Produit.objects.get(uniqcode=uniqcode)
     product.isactive=False
     product.save()
     return JsonResponse({
@@ -3790,12 +3790,12 @@ def excelpdcts(request):
 
 
 def deactivateaccount(request):
-    username=request.GET.get('username')
-    user=User.objects.get(username=username)
+    userid=request.GET.get('userid')
+    user=User.objects.get(pk=userid)
     user.is_active=False
     user.save()
     # delete user session in django session
-    UserSession.objects.filter(user=user).delete()
+    #UserSession.objects.filter(user=user).delete()
     # Clear the user's session
     #Session.objects.filter(session_key__in=UserSession.objects.filter(user=user).values('session_key')).delete()
 
@@ -3804,8 +3804,8 @@ def deactivateaccount(request):
     })
 
 def activateaccount(request):
-    username=request.GET.get('username')
-    user=User.objects.get(username=username)
+    userid=request.GET.get('userid')
+    user=User.objects.get(pk=userid)
     user.is_active=True
     user.save()
     return JsonResponse({
