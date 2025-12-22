@@ -317,6 +317,9 @@ def viewoneproduct(request, id):
     return render(request, 'viewoneproduct.html', ctx)
 @csrf_exempt
 def updateproduct(request):
+    token = request.headers.get('X-SYNC-TOKEN')
+    if token != '8a7f5b2c9d3e4f1g0h6j':
+        return JsonResponse({'error': 'Forbidden'}, status=403)
     productid=request.POST.get('productid')
     uniqcode=request.POST.get('uniqcode')
     new=request.POST.get('new')=='True'
