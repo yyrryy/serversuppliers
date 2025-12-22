@@ -3426,6 +3426,7 @@ def createclientaccount(request):
     print('>>>>>>')
     clientcode=request.GET.get('clientcode')
     client= Client.objects.get(code=clientcode)
+    olduser=client.user
     username=request.GET.get('username')
     password=request.GET.get('password')
     #check for username
@@ -3436,7 +3437,6 @@ def createclientaccount(request):
             'success':False,
             'error':'Username exist déja'
         })
-
     # create user
     user=User.objects.create_user(username=username, password=password)
     # assign user to client
@@ -3445,6 +3445,16 @@ def createclientaccount(request):
     user.save()
     client.user=user
     client.save()
+    if olduser:
+        cart=Cart.objects.filter(user=olduser).first()
+        wich=Wich.objects.filter(user=olduser).first()
+        if cart:
+            cart.user=user
+            cart.save()
+        if wich:
+            wich.user=user
+            wich.save()
+        olduser.delete()
     return JsonResponse({
         'success':True
     })
@@ -3466,11 +3476,22 @@ def createrepaccount(request):
     # create user
     user=User.objects.create_user(username=username, password=password)
     # assign user to rep
+    olduser=rep.user
     group, created = Group.objects.get_or_create(name="salsemen")
     user.groups.add(group)
     user.save()
     rep.user=user
     rep.save()
+    if olduser:
+        cart=Cart.objects.filter(user=olduser).first()
+        wich=Wich.objects.filter(user=olduser).first()
+        if cart:
+            cart.user=user
+            cart.save()
+        if wich:
+            wich.user=user
+            wich.save()
+        olduser.delete()
     return JsonResponse({
         'success':True
     })
