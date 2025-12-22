@@ -425,14 +425,15 @@ def loginuser(request):
         group=user.groups.all().first().name
         print('goutp', group)
         if group == 'salsemen':
-            usersession = UserSession.objects.filter(user=user)
-            # print(usersession, 'salseman session')
+            # uncomment for one time login in ne device
+            # usersession = UserSession.objects.filter(user=user)
+            # # print(usersession, 'salseman session')
 
-            if len(usersession)>0:
-                 # If the user is already authenticated, log them out
-                 print('user already post methode using class usersession')
-                 return redirect('main:login')
-            print('check if active')
+            # if len(usersession)>0:
+            #      # If the user is already authenticated, log them out
+            #      print('user already post methode using class usersession')
+            #      return redirect('main:login')
+            # print('check if active')
             if user.is_active:
                 UserSession.objects.create(user=user)
                 print('user is active')
@@ -445,12 +446,12 @@ def loginuser(request):
                 return redirect ('main:login')
         elif group=='clients':
             # get session of this user using django's default session management
-            usersession = UserSession.objects.filter(user=user)
-            print(usersession, 'client session')
-            if len(usersession)>0:
-                # If the user is already authenticated, log them out
-                print('user already post methode using class usersession')
-                return redirect('main:login')
+            # usersession = UserSession.objects.filter(user=user)
+            # print(usersession, 'client session')
+            # if len(usersession)>0:
+            #     # If the user is already authenticated, log them out
+            #     print('user already post methode using class usersession')
+            #     return redirect('main:login')
             if user.is_active:
                 login(request, user)
                 request.session.set_expiry(30 * 24 * 60 * 60)
