@@ -246,7 +246,7 @@ def addoneproduct(request):
             representprice=representprice,
             minstock=minstock,
             equivalent=equivalent,
-            cars=json.dumps(cars),
+            cars=cars,
             category_id=category,
             supplier_id=supplier,
             mark_id=mark,
