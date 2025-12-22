@@ -117,7 +117,7 @@ else:
         }
     }
 
-CSRF_TRUSTED_ORIGINS=['https://gzenaya.ma', 'http://134.209.226.177', 'localhost', '192.168.1.35']
+CSRF_TRUSTED_ORIGINS=['https://gzenaya.ma', 'http://134.209.226.177', 'localhost', 'http://192.168.1.35']
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
