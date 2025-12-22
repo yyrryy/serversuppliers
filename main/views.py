@@ -425,17 +425,17 @@ def loginuser(request):
         group=user.groups.all().first().name
         print('goutp', group)
         if group == 'salsemen':
-            # uncomment for one time login in ne device
+            # uncomment for one time login in ne device ERRREZ
             # usersession = UserSession.objects.filter(user=user)
             # # print(usersession, 'salseman session')
-
             # if len(usersession)>0:
             #      # If the user is already authenticated, log them out
             #      print('user already post methode using class usersession')
             #      return redirect('main:login')
             # print('check if active')
             if user.is_active:
-                UserSession.objects.create(user=user)
+                # ERRREZ
+                #UserSession.objects.create(user=user)
                 print('user is active')
                 login(request, user)
                 request.session.set_expiry(30 * 24 * 60 * 60)
@@ -446,6 +446,7 @@ def loginuser(request):
                 return redirect ('main:login')
         elif group=='clients':
             # get session of this user using django's default session management
+            #uncomment for one device ERRREZ
             # usersession = UserSession.objects.filter(user=user)
             # print(usersession, 'client session')
             # if len(usersession)>0:
@@ -455,8 +456,8 @@ def loginuser(request):
             if user.is_active:
                 login(request, user)
                 request.session.set_expiry(30 * 24 * 60 * 60)
-
-                UserSession.objects.create(user=user)
+                #onedevice ERRREZ
+                #UserSession.objects.create(user=user)
                 # keep user loged in
                 print('user is active')
                 return redirect('main:clientshome')
