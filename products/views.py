@@ -257,7 +257,7 @@ def addoneproduct(request):
             block=block,
             stocktotal=0,
             stockfacture=0,
-            isactive=False
+            isactive=True
         )
 
         
