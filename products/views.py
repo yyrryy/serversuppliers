@@ -319,9 +319,9 @@ def viewoneproduct(request, id):
 def updateproduct(request):
     productid=request.POST.get('productid')
     uniqcode=request.POST.get('uniqcode')
-    new=request.POST.get('new')
-    near=request.POST.get('near')
-    logos=request.POST.get('logos', None)
+    new=request.POST.get('new')=='True'
+    near=request.POST.get('near')=='True'
+    logos = request.POST.getlist('logos')
     remise=request.POST.get('remise')
     sellprice=request.POST.get('sellprice')
     netprice=request.POST.get('netprice')
