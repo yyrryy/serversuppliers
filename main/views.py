@@ -1045,7 +1045,7 @@ def addtocart(request):
     qty=request.GET.get('qty')
     print('>>>>>>>>>', productid, qty)
     product=Produit.objects.get(pk=productid)
-    total=round(int(qty)*product.prixnet, 2)
+    total=round(int(qty)*product.sellprice, 2)
     #group=request.user.groups.all().first().name
     #if group == 'clients':
     #    total=round(int(qty)*product.prixnet, 2)
@@ -1154,7 +1154,7 @@ def addtowhishlist(request):
     qty=request.GET.get('qty')
     print('>>>>>>>>>', productid, qty)
     product=Produit.objects.get(pk=productid)
-    total=round(int(qty)*product.prixnet, 2)
+    total=round(int(qty)*product.sellprice, 2)
     try:
         cart=Wich.objects.get(user=request.user)
         # check if product alrady exist
@@ -1188,7 +1188,7 @@ def updatecartitem(request):
     item=Cartitems.objects.get(pk=cartitemid)
     cart.total=round(float(cart.total)-float(item.total), 2)
     item.qty=qty
-    total=round(float(product.prixnet)*float(qty), 2)
+    total=round(float(product.sellprice)*float(qty), 2)
     cart.total=cart.total+total
     item.total=total
     item.save()
@@ -1207,7 +1207,7 @@ def updatewishitem(request):
     item=Wishlist.objects.get(pk=cartitemid)
     cart.total=round(float(cart.total)-float(item.total), 2)
     item.qty=qty
-    total=round(float(product.prixnet)*float(qty), 2)
+    total=round(float(product.sellprice)*float(qty), 2)
     cart.total=cart.total+total
     item.total=total
     item.save()
