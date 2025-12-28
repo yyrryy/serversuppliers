@@ -484,14 +484,14 @@ def commande(request):
         cmndfromclient=request.POST.get('cmndfromclient')
         if cmndfromclient == 'true':
             order=Order.objects.create(client=client, salseman=client.represent,  modpymnt='--', modlvrsn='--',total=totalofdispounible, isclientcommnd=True, note=notesorder)
-            req.get('http://ibraparts.ddns.net/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':client.code, 'total':totalofdispounible, 'notesorder':notesorder, 'cmndfromclient':cmndfromclient, 'userid':request.user.id})
+            req.get('http://localserver/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':client.code, 'total':totalofdispounible, 'notesorder':notesorder, 'cmndfromclient':cmndfromclient, 'userid':request.user.id})
         else:
             rep=Represent.objects.get(user_id=request.user.id).id
             order=Order.objects.create(client_id=request.POST.get('client'), salseman_id=rep,  modpymnt='--', modlvrsn='--',total=totalofdispounible, note=notesorder)
-            req.get('http://ibraparts.ddns.net/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':client.code, 'total':totalofdispounible, 'notesorder':notesorder, 'cmndfromclient':cmndfromclient, 'userid':request.user.id, 'rep':rep})
+            req.get('http://localserver/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':client.code, 'total':totalofdispounible, 'notesorder':notesorder, 'cmndfromclient':cmndfromclient, 'userid':request.user.id, 'rep':rep})
             if len(itemsnotdisponible)>0:
                 order=Order.objects.create(client_id=request.POST.get('client'), salseman_id=rep,  modpymnt='--', modlvrsn='--',total=totalofnotdispounible, note=notesorder+' Reliquat')
-                req.get('http://ibraparts.ddns.net/commandfromserver', {'items':json.dumps(itemsnotdisponible), 'clientcode':client.code, 'total':totalofnotdispounible, 'notesorder':notesorder+' Reliquat', 'cmndfromclient':cmndfromclient, 'userid':request.user.id, 'rep':rep})
+                req.get('http://localserver/commandfromserver', {'items':json.dumps(itemsnotdisponible), 'clientcode':client.code, 'total':totalofnotdispounible, 'notesorder':notesorder+' Reliquat', 'cmndfromclient':cmndfromclient, 'userid':request.user.id, 'rep':rep})
         
         Ordersnotif.objects.create(user_id=request.user.id)
 
@@ -999,7 +999,7 @@ def getitemsincart(request):
         'length':length,
         'items':itemscart
     })
-    response['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    response['Access-Control-Allow-Origin'] = 'http://localserver'
     return response
 
 def updateproduct(request):
@@ -1116,7 +1116,7 @@ def getitemsinwishlist(request):
         'length':length,
         'items':itemswich
     })
-    res['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    res['Access-Control-Allow-Origin'] = 'http://localserver'
     return res
 
 def removeitemfromwish(request):

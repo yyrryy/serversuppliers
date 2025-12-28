@@ -19,7 +19,7 @@ import asyncio
 import requests as req
 TOKEN = '6716455240:AAFgHhoQLrmCU8Elc_A_DQFLrwCJtsHk3P8'
 user_chat_ids = ['USER_CHAT_ID_1', 'USER_CHAT_ID_2', 'USER_CHAT_ID_3']
-group_chat_id = '-4156780513'
+group_chat_id = '-4156'
 
 
 def tocatalog(user):
@@ -505,7 +505,6 @@ def updatepassword(request):
 @login_required(login_url='main:loginpage')
 def commande(request):
     client=Client.objects.get(pk=request.POST.get('client'))
-    import requests as req
     # clientname=request.POST.get('clientname')
     # clientaddress=request.POST.get('clientaddress')
     # clientphone=request.POST.get('clientphone')
@@ -519,46 +518,49 @@ def commande(request):
         for i in cartitems:
             if request.user.groups.first().name=='clients':
                 if i.product.stocktotal>0:
-                    totalofdispounible+=i.total
+                    totalofdispounible+=round(i.product.sellprice * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
                         'price':i.product.sellprice,
-                        'total':i.total,
+                        'total':round(i.product.sellprice * i.qty, 2),
                         'remise':i.product.remise,
                         'productid':i.product.id,
+                        'uniqcode':i.product.uniqcode
                     }
                     itemsdisponible.append(item)
                     i.delete()
-                else:
-                    totalofnotdispounible+=i.total
+                # else:
+                #     totalofnotdispounible+=i.total
                 cart.total=totalofnotdispounible
                 cart.save()
                 
             else:
                 if i.product.stocktotal>0:
-                    totalofdispounible+=i.total
+                    totalofdispounible+=round(i.product.sellprice * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
                         'price':i.product.sellprice,
-                        'total':i.total,
+                        'total':round(i.product.sellprice * i.qty, 2),
                         'remise':i.product.remise,
                         'productid':i.product.id,
+                        'uniqcode':i.product.uniqcode
                     }
                     itemsdisponible.append(item)
                     i.delete()
                 else:
-                    totalofnotdispounible+=i.total
+                    totalofnotdispounible+=round(i.product.sellprice * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
                         'price':i.product.sellprice,
-                        'total':i.total,
+                        'total':round(i.product.sellprice * i.qty, 2),
                         'remise':i.product.remise,
+                        'uniqcode':i.product.uniqcode,
                         'productid':i.product.id,
                     }
                     itemsnotdisponible.append(item)
@@ -570,64 +572,66 @@ def commande(request):
                 'valid':False,
                 'message': 'Stock null panier'
             })
-
         notesorder=request.POST.get('notesorder')
         cmndfromclient=request.POST.get('cmndfromclient')
         if cmndfromclient == 'true':
-            order=Order.objects.create(client=client, salseman=client.represent,  modpymnt='--', modlvrsn='--',total=totalofdispounible, isclientcommnd=True, note=notesorder, senttoserver=True)
+            order=Order.objects.create(client=client, salseman=client.represent,  modpymnt='--', modlvrsn='--',total=totalofdispounible, isclientcommnd=True, note=notesorder, senttoserver=False)
             for i in itemsdisponible:
                 Orderitem.objects.create(order=order, ref=i['ref'], name=i['name'], qty=int(i['qty']), product_id=i['productid'], remise=i['remise'], price=i['price'], total=i['total'])
-            try:
-                req.get('http://ibraparts.ddns.net/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':client.code, 'total':totalofdispounible, 'notesorder':notesorder, 'cmndfromclient':cmndfromclient, 'userid':request.user.id})
-            except:
-                order.senttoserver=False
-                order.save()
-                async def send_message_to_group(group_chat_id, message_text):
-                    await bot.send_message(chat_id=group_chat_id, text=message_text)
-                # Initialize the bot
-                bot = telegram.Bot(token=TOKEN)
-                message_text = 'Nouveau commande server'
+            # try:
+            #     req.get('http://localserver/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':client.code, 'total':totalofdispounible, 'notesorder':notesorder, 'cmndfromclient':cmndfromclient, 'userid':request.user.id})
+            # except:
+            #     order.senttoserver=False
+            #     order.save()
+            # async def send_message_to_group(group_chat_id, message_text):
+            #     await bot.send_message(chat_id=group_chat_id, text=message_text)
+            # # Initialize the bot
+            # bot = telegram.Bot(token=TOKEN)
+            # message_text = 'Nouveau commande server'
 
-                # Send message to the group
-                asyncio.run(send_message_to_group(group_chat_id, message_text))
+            # # Send message to the group
+            # asyncio.run(send_message_to_group(group_chat_id, message_text))
         else:
             rep=Represent.objects.get(user_id=request.user.id).id
-            order=Order.objects.create(client_id=request.POST.get('client'), salseman_id=rep,  modpymnt='--', modlvrsn='--',total=totalofdispounible, note=notesorder, senttoserver=True)
+            order=Order.objects.create(client_id=request.POST.get('client'), salseman_id=rep,  modpymnt='--', modlvrsn='--',total=totalofdispounible, note=notesorder, senttoserver=False)
             for i in itemsdisponible:
                 Orderitem.objects.create(order=order, ref=i['ref'], name=i['name'], qty=int(i['qty']), product_id=i['productid'], remise=i['remise'], price=i['price'], total=i['total'])
-            try:
-                req.get('http://ibraparts.ddns.net/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':client.code, 'total':totalofdispounible, 'notesorder':notesorder, 'cmndfromclient':cmndfromclient, 'userid':request.user.id, 'rep':rep})
-            except:
-                order.senttoserver=False
-                order.save()
-                async def send_message_to_group(group_chat_id, message_text):
-                    await bot.send_message(chat_id=group_chat_id, text=message_text)
-                # Initialize the bot
-                bot = telegram.Bot(token=TOKEN)
-                message_text = 'Nouveau commande server'
-
-                # Send message to the group
-                asyncio.run(send_message_to_group(group_chat_id, message_text))
-
+            # try:
+            #     req.get('http://localserver/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':client.code, 'total':totalofdispounible, 'notesorder':notesorder, 'cmndfromclient':cmndfromclient, 'userid':request.user.id, 'rep':rep})
+            # except:
+            #     order.senttoserver=False
+            #     order.save()
             if len(itemsnotdisponible)>0:
-                order=Order.objects.create(client_id=request.POST.get('client'), salseman_id=rep,  modpymnt='--', modlvrsn='--',total=totalofnotdispounible, note=notesorder+' Reliquat', senttoserver=True)
+                reliquatorder=Order.objects.create(client_id=request.POST.get('client'), salseman_id=rep,  modpymnt='--', modlvrsn='--',total=totalofnotdispounible, note=notesorder+' Reliquat', senttoserver=False)
                 for i in itemsnotdisponible:
-                    Orderitem.objects.create(order=order, ref=i['ref'], name=i['name'], qty=int(i['qty']), product_id=i['productid'], remise=i['remise'], price=i['price'], total=i['total'])
-                try:
-                    req.get('http://ibraparts.ddns.net/commandfromserver', {'items':json.dumps(itemsnotdisponible), 'clientcode':client.code, 'total':totalofnotdispounible, 'notesorder':notesorder+' Reliquat', 'cmndfromclient':cmndfromclient, 'userid':request.user.id, 'rep':rep})
-                except:
-                    order.senttoserver=False
-                    order.save()
-                    async def send_message_to_group(group_chat_id, message_text):
-                        await bot.send_message(chat_id=group_chat_id, text=message_text)
-                    # Initialize the bot
-                    bot = telegram.Bot(token=TOKEN)
-                    message_text = 'Nouveau commande server'
+                    Orderitem.objects.create(order=reliquatorder, ref=i['ref'], name=i['name'], qty=int(i['qty']), product_id=i['productid'], remise=i['remise'], price=i['price'], total=i['total'])
+                # try:
+                #     req.get('http://localserver/commandfromserver', {'items':json.dumps(itemsnotdisponible), 'clientcode':client.code, 'total':totalofnotdispounible, 'notesorder':notesorder+' Reliquat', 'cmndfromclient':cmndfromclient, 'userid':request.user.id, 'rep':rep})
+                # except:
+                #     order.senttoserver=False
+                #     order.save()
+                #     async def send_message_to_group(group_chat_id, message_text):
+                #         await bot.send_message(chat_id=group_chat_id, text=message_text)
+                #     # Initialize the bot
+                #     bot = telegram.Bot(token=TOKEN)
+                #     message_text = 'Nouveau commande server'
     
-                    # Send message to the group
-                    asyncio.run(send_message_to_group(group_chat_id, message_text))
+                #     # Send message to the group
+                #     asyncio.run(send_message_to_group(group_chat_id, message_text))
 
-        Ordersnotif.objects.create(user_id=request.user.id)
+        # Ordersnotif.objects.create(user_id=request.user.id)
+        bot_token='7266453006:AAG-MvJL1LYYH26tK-9TjRVpLMWTsPNhwB0'
+        chat_id='-555555'
+        send_message_url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
+        params = {
+            'chat_id': chat_id,
+            'text': f'client: {client.name}, representant: {client.represent} => {"Non" if cmndfromclient else "Oui"}, total: {order.total}'
+        }
+        response = req.get(send_message_url, params=params)
+        if response.status_code == 200:
+            print('Message sent successfully!')
+        else:
+            print('Failed to send message:', response.text)
 
         # totalremise=request.POST.get('totalremise', 0)
         
@@ -1138,7 +1142,7 @@ def getitemsincart(request):
         'length':length,
         'items':itemscart
     })
-    response['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    response['Access-Control-Allow-Origin'] = 'http://localserver'
     return response
 
 def updateproduct(request):
@@ -1255,7 +1259,7 @@ def getitemsinwishlist(request):
         'length':length,
         'items':itemswich
     })
-    res['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    res['Access-Control-Allow-Origin'] = 'http://localserver'
     return res
 
 def removeitemfromwish(request):
@@ -1368,7 +1372,6 @@ def ordersnotsent(request):
     return render(request, 'notsent.html', ctx)
 
 def sendordertoserver(request):
-    import requests as req
     orderid=request.GET.get('orderid')
     order=Order.objects.get(pk=orderid)
     orderitems=Orderitem.objects.filter(order=order)
@@ -1382,10 +1385,11 @@ def sendordertoserver(request):
             'total':i.total,
             'remise':i.product.remise,
             'productid':i.product.id,
+            'uniqcode':i.product.uniqcode,
         }
         itemsdisponible.append(item)
     try:
-        req.get('http://ibraparts.ddns.net/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':order.client.code, 'total':order.total, 'notesorder':order.note, 'cmndfromclient':'true' if order.isclientcommnd else 'false', 'rep':order.client.represent.id if order.client.represent else None, 'userid':1})
+        req.get('http://localserver/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':order.client.code, 'total':order.total, 'notesorder':order.note, 'cmndfromclient':'true' if order.isclientcommnd else 'false', 'rep':order.client.represent.id if order.client.represent else None, 'userid':1})
         order.senttoserver=True
         order.save()
         return JsonResponse({
@@ -1418,3 +1422,11 @@ def getproducdataforsuppliers(request):
     return JsonResponse({
         'html':html
     })
+def getcommandnumber(request):
+    orders=Order.objects.filter(senttoserver=False)
+    return JsonResponse({
+        'length':len(orders)
+    })
+
+
+        

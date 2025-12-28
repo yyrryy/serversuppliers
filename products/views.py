@@ -2236,7 +2236,7 @@ def relevclient(request):
     client=Client.objects.get(pk=clientid)
     startdate=request.POST.get('datefrom')
     enddate=request.POST.get('dateto')
-    res=req.get('http://ibraparts.ddns.net/products/sendrelevclient', {'clientcode':client.code, 'datefrom':startdate, 'dateto':enddate})
+    res=req.get('http://localserver/products/sendrelevclient', {'clientcode':client.code, 'datefrom':startdate, 'dateto':enddate})
     return JsonResponse(res.json()) 
     #startdate = datetime.strptime(startdate, '%Y-%m-%d')
     #enddate = datetime.strptime(enddate, '%Y-%m-%d')
@@ -2311,7 +2311,7 @@ def relevclientfc(request):
     client=Client.objects.get(pk=clientid)
     startdate=request.POST.get('datefrom')
     enddate=request.POST.get('dateto')
-    res=req.get('http://ibraparts.ddns.net/products/sendrelevclientfc', {'clientcode':client.code, 'datefrom':startdate, 'dateto':enddate})
+    res=req.get('http://localserver/products/sendrelevclientfc', {'clientcode':client.code, 'datefrom':startdate, 'dateto':enddate})
     return JsonResponse(res.json())
     #startdate = datetime.strptime(startdate, '%Y-%m-%d')
     #enddate = datetime.strptime(enddate, '%Y-%m-%d')
@@ -3992,7 +3992,7 @@ def notifyadmin(request):
     response= JsonResponse({
         "length": newnotif.count(),
     })
-    response['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    response['Access-Control-Allow-Origin'] = 'http://localserver'
     return response
 
 def disablenotif(request):
@@ -4069,7 +4069,7 @@ def getconnectedusers(request):
         'length':length,
         'trs':trs
     })
-    response['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    response['Access-Control-Allow-Origin'] = 'http://localserver'
     return response
 
 
@@ -4124,7 +4124,7 @@ def listeconnected(request):
     }
 
     response= JsonResponse(ctx)
-    response['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    response['Access-Control-Allow-Origin'] = 'http://localserver'
     return response
 
 def updatepdctdata(requests):
@@ -6794,3 +6794,41 @@ def allowcatalog(request):
     })
 def minidashboard(request):
     return render(request, 'minidashboard.html')
+
+def sendcommandstoserver(request):
+    orders=Order.objects.filter(senttoserver=False)
+    if len(orders)==0:
+        return JsonResponse({
+            'success':False,
+            'message':'Aucune commande à envoyer'
+        })
+    orderstosend=[]
+    orderitemsstosend=[]
+    for order in orders:
+        orderdata={
+            'id':order.id,
+            'order_no':order.order_no,
+            'isclientcommnd':order.isclientcommnd,
+            'note':order.note,
+            'client':order.client.id,
+            'salseman':order.salseman
+        }
+        orderstosend.append(orderdata)
+        orderitems=Orderitem.objects.filter(order=order)
+        thisordertotal=0
+        for item in orderitems:
+            thisordertotal+=round(item.product.sellprice*item.qty, 2)
+            orderitemsdata={
+                'ordernumber':item.order.order_no,
+                #uniqcode will be the connection
+                'uniqcode':item.product.uniqcode,
+                'qty':item.qty,
+                'total':item.total,
+            }
+            orderitemsstosend.append(orderitemsdata)
+        orderdata['total']=thisordertotal
+    return JsonResponse({
+        'success':True,
+        'orders':orderstosend,
+        'items':orderitemsstosend
+    })

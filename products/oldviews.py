@@ -3971,7 +3971,7 @@ def notifyadmin(request):
     response= JsonResponse({
         "length": newnotif.count(),
     })
-    response['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    response['Access-Control-Allow-Origin'] = 'http://localserver'
     return response
 
 def disablenotif(request):
@@ -4038,7 +4038,7 @@ def getconnectedusers(request):
         'length':length,
         'trs':trs
     })
-    response['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    response['Access-Control-Allow-Origin'] = 'http://localserver'
     return response
 
 
@@ -4081,7 +4081,7 @@ def listeconnected(request):
     }
 
     response= render(request, 'listconnected.html', ctx)
-    response['Access-Control-Allow-Origin'] = 'http://ibraparts.ddns.net'
+    response['Access-Control-Allow-Origin'] = 'http://localserver'
     return response
 
 def updatepdctdata(requests):
