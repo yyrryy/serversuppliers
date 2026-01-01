@@ -6795,15 +6795,16 @@ def allowcatalog(request):
 def minidashboard(request):
     return render(request, 'minidashboard.html')
 
-def sendcommandstoserver(request):
+def getcommandnumber(request):
     orders=Order.objects.filter(senttoserver=False)
     if len(orders)==0:
         return JsonResponse({
             'success':False,
+            'length':0,
             'message':'Aucune commande à envoyer'
         })
     orderstosend=[]
-    orderitemsstosend=[]
+    #orderitemsstosend=[]
     for order in orders:
         orderdata={
             'id':order.id,
@@ -6811,7 +6812,9 @@ def sendcommandstoserver(request):
             'isclientcommnd':order.isclientcommnd,
             'note':order.note,
             'client':order.client.id,
-            'salseman':order.salseman
+            'salsemanid':order.salseman.id if order.salseman else None,
+            'date':order.date,
+            'items':[]
         }
         orderstosend.append(orderdata)
         orderitems=Orderitem.objects.filter(order=order)
@@ -6823,12 +6826,60 @@ def sendcommandstoserver(request):
                 #uniqcode will be the connection
                 'uniqcode':item.product.uniqcode,
                 'qty':item.qty,
+                'price':item.price,
                 'total':item.total,
             }
-            orderitemsstosend.append(orderitemsdata)
+            orderdata['items'].append(orderitemsdata)
+            #orderitemsstosend.append(orderitemsdata)
         orderdata['total']=thisordertotal
+    orders.update(senttoserver=True)
+    return JsonResponse({
+        'success':True,
+        'length':len(orders),
+        'orders':orderstosend,
+        #'items':orderitemsstosend
+    })
+    
+
+def sendcommandstoserver(request):
+    orders=Order.objects.filter(senttoserver=False)
+    if len(orders)==0:
+        return JsonResponse({
+            'success':False,
+            'message':'Aucune commande à envoyer'
+        })
+    orderstosend=[]
+    #orderitemsstosend=[]
+    for order in orders:
+        orderdata={
+            'id':order.id,
+            'order_no':order.order_no,
+            'isclientcommnd':order.isclientcommnd,
+            'note':order.note,
+            'client':order.client.id,
+            'salsemanid':order.salseman.id if order.salseman else None,
+            'date':order.date,
+            'items':[]
+        }
+        orderstosend.append(orderdata)
+        orderitems=Orderitem.objects.filter(order=order)
+        thisordertotal=0
+        for item in orderitems:
+            thisordertotal+=round(item.product.sellprice*item.qty, 2)
+            orderitemsdata={
+                'ordernumber':item.order.order_no,
+                #uniqcode will be the connection
+                'uniqcode':item.product.uniqcode,
+                'qty':item.qty,
+                'price':item.price,
+                'total':item.total,
+            }
+            orderdata['items'].append(orderitemsdata)
+            #orderitemsstosend.append(orderitemsdata)
+        orderdata['total']=thisordertotal
+    print('orders', orderstosend)
     return JsonResponse({
         'success':True,
         'orders':orderstosend,
-        'items':orderitemsstosend
+        #'items':orderitemsstosend
     })

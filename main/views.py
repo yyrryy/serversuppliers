@@ -102,7 +102,7 @@ def searchrefphone(request):
                         <div class="d-flex justify-content-between">
                             <div class="status {status}"></div>
                             
-                            <img src="{i.carlogos.image.url if i.carlogos and i.carlogos.image else ''}" width="40" style="width:40px;">
+
                             
                         </div>
                     
@@ -148,7 +148,7 @@ def searchrefphone(request):
                         <div class="suggestions__product-name"> {i.name} </div>
                         <div class="d-flex justify-content-between">
                             <div class="status {status}"></div>
-                            <img src="{i.carlogos.image.url if i.carlogos and i.carlogos.image else ''}" width="40" style="width:40px;">
+                            
     
                         
                         </div>
@@ -200,6 +200,7 @@ def searchrefphone(request):
                 status="disponible"
             else:
                 status="soon"
+            # <img src="{i.carlogos.image.url if i.carlogos and i.carlogos.image else ''}" width="40" style="width:40px;">
             if request.user.groups.first().name=='clients':
                 a+=f"""
                     <div class="suggestions__item suggestions__product border mb-2 productsbrand{i.mark.id if i.mark else ''} productscategorycat{i.category.id if i.category else ''}">
@@ -223,7 +224,7 @@ def searchrefphone(request):
                         <div class="d-flex justify-content-between">
                             <div class="status {status}"></div>
                             
-                            <img src="{i.carlogos.image.url if i.carlogos and i.carlogos.image else ''}" width="40" style="width:40px;">
+                            
                             
                         </div>
                     
@@ -269,7 +270,7 @@ def searchrefphone(request):
                         <div class="suggestions__product-name"> {i.name} </div>
                         <div class="d-flex justify-content-between">
                             <div class="status {status}"></div>
-                            <img src="{i.carlogos.image.url if i.carlogos and i.carlogos.image else ''}" width="40" style="width:40px;">
+                            
     
                         
                         </div>
@@ -1421,11 +1422,6 @@ def getproducdataforsuppliers(request):
     html=req.get(f"http://167.71.77.64/searcher/getproducdataforsuppliers?code={request.GET.get('code')}").content.decode('utf-8')
     return JsonResponse({
         'html':html
-    })
-def getcommandnumber(request):
-    orders=Order.objects.filter(senttoserver=False)
-    return JsonResponse({
-        'length':len(orders)
     })
 
 
