@@ -310,7 +310,7 @@ class Order(models.Model):
     client=models.ForeignKey(Client, on_delete=models.CASCADE, default=None, null=True)
     order_no=models.CharField(max_length=500, null=True, default=None)
     # if sent to server it's gonna be true
-    senttoserver=models.BooleanField(default=True)
+    senttoserver=models.BooleanField(default=False)
     # order by date
     def __str__(self) -> str:
         return f'{self.client.name} {self.senttoserver}'
