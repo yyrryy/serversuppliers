@@ -519,13 +519,13 @@ def commande(request):
         for i in cartitems:
             if request.user.groups.first().name=='clients':
                 if i.product.stocktotal>0:
-                    totalofdispounible+=round(i.product.sellprice * i.qty, 2)
+                    totalofdispounible+=round(i.product.prixnet * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
-                        'price':i.product.sellprice,
-                        'total':round(i.product.sellprice * i.qty, 2),
+                        'price':i.product.prixnet,
+                        'total':round(i.product.prixnet * i.qty, 2),
                         'remise':i.product.remise,
                         'productid':i.product.id,
                         'uniqcode':i.product.uniqcode
@@ -539,13 +539,13 @@ def commande(request):
                 
             else:
                 if i.product.stocktotal>0:
-                    totalofdispounible+=round(i.product.sellprice * i.qty, 2)
+                    totalofdispounible+=round(i.product.prixnet * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
-                        'price':i.product.sellprice,
-                        'total':round(i.product.sellprice * i.qty, 2),
+                        'price':i.product.prixnet,
+                        'total':round(i.product.prixnet * i.qty, 2),
                         'remise':i.product.remise,
                         'productid':i.product.id,
                         'uniqcode':i.product.uniqcode
@@ -553,13 +553,13 @@ def commande(request):
                     itemsdisponible.append(item)
                     i.delete()
                 else:
-                    totalofnotdispounible+=round(i.product.sellprice * i.qty, 2)
+                    totalofnotdispounible+=round(i.product.prixnet * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
-                        'price':i.product.sellprice,
-                        'total':round(i.product.sellprice * i.qty, 2),
+                        'price':i.product.prixnet,
+                        'total':round(i.product.prixnet * i.qty, 2),
                         'remise':i.product.remise,
                         'uniqcode':i.product.uniqcode,
                         'productid':i.product.id,
