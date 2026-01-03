@@ -6812,7 +6812,7 @@ def getcommandnumber(request):
             'order_no':order.order_no,
             'isclientcommnd':order.isclientcommnd,
             'note':order.note,
-            'client':order.client.id,
+            'clientcode':order.client.code,
             'salsemanid':order.salseman.id if order.salseman else None,
             'date':order.date,
             'items':[]
