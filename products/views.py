@@ -69,6 +69,7 @@ def categoriespage(request):
     }
     return render(request, 'categories.html', ctx)
 
+@csrf_exempt
 def createcategory(request):
     print('>>>>>>>> creating category')
     name=request.POST.get('name')
@@ -89,6 +90,7 @@ def createcategory(request):
     return JsonResponse({
         'success':True
     })
+
 @csrf_exempt
 def updatecategory(request):
     
@@ -113,6 +115,7 @@ def updatecategory(request):
 
 
 
+@csrf_exempt
 def createmarque(request):
     try:
         name=request.POST.get('name')
