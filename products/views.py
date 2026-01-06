@@ -68,7 +68,6 @@ def categoriespage(request):
         'title':'Categories'
     }
     return render(request, 'categories.html', ctx)
-
 @csrf_exempt
 def createcategory(request):
     print('>>>>>>>> creating category')
@@ -90,7 +89,6 @@ def createcategory(request):
     return JsonResponse({
         'success':True
     })
-
 @csrf_exempt
 def updatecategory(request):
     
@@ -112,7 +110,6 @@ def updatecategory(request):
     return JsonResponse({
         'success':True
     })
-
 
 
 @csrf_exempt
@@ -332,20 +329,21 @@ def updateproduct(request):
     netprice=request.POST.get('netprice')
     image = request.FILES.get('image')
     product=Produit.objects.get(uniqcode=uniqcode)
-    if float(sellprice) != float(product.sellprice):
-        print('>>>>>>>>price changed', sellprice, product.sellprice, sellprice != product.sellprice)
-        reliquas=Wishlist.objects.filter(product=product)
-        for i in reliquas:
-            i.total=round(float(netprice)*float(i.qty), 2)
-            i.save()
-        cartitems=Cartitems.objects.filter(product=product)
-        for i in cartitems:
-            newtotal=round(float(netprice)*float(i.qty), 2)
-            newcarttotal=i.cart.total-i.total+newtotal
-            i.total=newtotal
-            i.save()
-            i.cart.total=newcarttotal
-            i.cart.save()
+    if product.sellprice:
+        if float(sellprice) != float(product.sellprice):
+            print('>>>>>>>>price changed', sellprice, product.sellprice, sellprice != product.sellprice)
+            reliquas=Wishlist.objects.filter(product=product)
+            for i in reliquas:
+                i.total=round(float(netprice)*float(i.qty), 2)
+                i.save()
+            cartitems=Cartitems.objects.filter(product=product)
+            for i in cartitems:
+                newtotal=round(float(netprice)*float(i.qty), 2)
+                newcarttotal=i.cart.total-i.total+newtotal
+                i.total=newtotal
+                i.save()
+                i.cart.total=newcarttotal
+                i.cart.save()
     product.carlogos.set(logos)
     product.near=near
     product.isnew=new
@@ -3437,6 +3435,7 @@ def createclientaccount(request):
     print('>>>>>>', clientcode, username, password)
     user=User.objects.filter(username=username).first()
     if user:
+        print('username already', username)
         return JsonResponse({
             'success':False,
             'error':'Username exist déja'

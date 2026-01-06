@@ -95,8 +95,8 @@ def searchrefphone(request):
                         <strong class="text-blue">{i.ref.upper()}</strong>  <strong style="margin-left:75px;">Résultats de rercherche pour: {ref}</strong><br>
                         <strong style="color:red;">{i.refeq1.upper() if i.refeq1 else ''}</strong> <br>
                         <strong style="color:blue;">{i.refeq2.upper() if i.refeq2 else ''}</strong> <br>
-                        <strong style="color:blue;">{i.diametre if i.diametre else ''}</strong> <br>
-                        <strong style="color:red; font-size:20px;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
+                        <strong style="color:blue;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
+                        <strong style="color:red;">{i.diametre if i.diametre else ''}</strong> <br>
                         </div>
                         <div class="suggestions__product-name"> {i.name} </div>
                         <div class="d-flex justify-content-between">
@@ -142,8 +142,8 @@ def searchrefphone(request):
                         <strong class="text-blue">{i.ref.upper()}</strong> <br>
                         <strong style="color:red;">{i.refeq1.upper() if i.refeq1 else ''}</strong> <br>
                         <strong style="color:blue;">{i.refeq2.upper() if i.refeq2 else ''}</strong> <br>
-                        <strong style="color:blue;">{i.diametre if i.refeq2 else ''}</strong> <br>
-                        <strong style="color:red; font-size:20px;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
+                        <strong style="color:blue;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
+                        <strong style="color:red;">{i.diametre if i.diametre else ''}</strong> <br>
                         </div>
                         <div class="suggestions__product-name"> {i.name} </div>
                         <div class="d-flex justify-content-between">
@@ -217,8 +217,8 @@ def searchrefphone(request):
                         <strong class="text-blue">{i.ref.upper()}</strong>  <strong style="margin-left:75px;">Résultats de rercherche pour: {ref}</strong><br>
                         <strong style="color:red;">{i.refeq1.upper() if i.refeq1 else ''}</strong> <br>
                         <strong style="color:blue;">{i.refeq2.upper() if i.refeq2 else ''}</strong> <br>
-                        <strong style="color:blue;">{i.diametre if i.diametre else ''}</strong> <br>
-                        <strong style="color:red; font-size:20px;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
+                        <strong style="color:blue;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
+                        <strong style="color:red;">{i.diametre if i.diametre else ''}</strong> <br>
                         </div>
                         <div class="suggestions__product-name"> {i.name} </div>
                         <div class="d-flex justify-content-between">
@@ -264,8 +264,8 @@ def searchrefphone(request):
                         <strong class="text-blue">{i.ref.upper()}</strong> <br>
                         <strong style="color:red;">{i.refeq1.upper() if i.refeq1 else ''}</strong> <br>
                         <strong style="color:blue;">{i.refeq2.upper() if i.refeq2 else ''}</strong> <br>
-                        <strong style="color:blue;">{i.diametre if i.refeq2 else ''}</strong> <br>
-                        <strong style="color:red; font-size:20px;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
+                        <strong style="color:blue;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
+                        <strong style="color:red;">{i.diametre if i.diametre else ''}</strong> <br>
                         </div>
                         <div class="suggestions__product-name"> {i.name} </div>
                         <div class="d-flex justify-content-between">
@@ -347,13 +347,13 @@ def home(request):
     }
     # print(request.user)
     # print(request.user.groups.first())
-    # if request.user.groups.first():
-    #     if (request.user.groups.first().name=='salsemen'):
-    #         return redirect(catalog)
-    #     if (request.user.groups.first().name=='accounting'):
-    #         return redirect('main:orders')
-    #     if (request.user.groups.first().name=='admin'):
-    #         return redirect('main:orders')
+    if request.user.groups.first():
+        if (request.user.groups.first().name=='salsemen'):
+            return redirect('main:catalogpage')
+        if (request.user.groups.first().name=='clients'):
+            return redirect('main:clientshome')
+        if (request.user.groups.first().name=='admin'):
+            return redirect('main:orders')
     # return redirect('main:loginpage')
     return render(request, 'login.html', ctx)
 
@@ -519,13 +519,13 @@ def commande(request):
         for i in cartitems:
             if request.user.groups.first().name=='clients':
                 if i.product.stocktotal>0:
-                    totalofdispounible+=round(i.product.prixnet * i.qty, 2)
+                    totalofdispounible+=round(i.product.sellprice * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
-                        'price':i.product.prixnet,
-                        'total':round(i.product.prixnet * i.qty, 2),
+                        'price':i.product.sellprice,
+                        'total':round(i.product.sellprice * i.qty, 2),
                         'remise':i.product.remise,
                         'productid':i.product.id,
                         'uniqcode':i.product.uniqcode
@@ -539,13 +539,13 @@ def commande(request):
                 
             else:
                 if i.product.stocktotal>0:
-                    totalofdispounible+=round(i.product.prixnet * i.qty, 2)
+                    totalofdispounible+=round(i.product.sellprice * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
-                        'price':i.product.prixnet,
-                        'total':round(i.product.prixnet * i.qty, 2),
+                        'price':i.product.sellprice,
+                        'total':round(i.product.sellprice * i.qty, 2),
                         'remise':i.product.remise,
                         'productid':i.product.id,
                         'uniqcode':i.product.uniqcode
@@ -553,13 +553,13 @@ def commande(request):
                     itemsdisponible.append(item)
                     i.delete()
                 else:
-                    totalofnotdispounible+=round(i.product.prixnet * i.qty, 2)
+                    totalofnotdispounible+=round(i.product.sellprice * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
-                        'price':i.product.prixnet,
-                        'total':round(i.product.prixnet * i.qty, 2),
+                        'price':i.product.sellprice,
+                        'total':round(i.product.sellprice * i.qty, 2),
                         'remise':i.product.remise,
                         'uniqcode':i.product.uniqcode,
                         'productid':i.product.id,
@@ -593,6 +593,7 @@ def commande(request):
             # # Send message to the group
             # asyncio.run(send_message_to_group(group_chat_id, message_text))
         else:
+            print('create order rep')
             rep=Represent.objects.get(user_id=request.user.id).id
             order=Order.objects.create(client_id=request.POST.get('client'), salseman_id=rep,  modpymnt='--', modlvrsn='--',total=totalofdispounible, note=notesorder, senttoserver=False)
             for i in itemsdisponible:
@@ -621,18 +622,18 @@ def commande(request):
                 #     asyncio.run(send_message_to_group(group_chat_id, message_text))
 
         # Ordersnotif.objects.create(user_id=request.user.id)
-        bot_token='7266453006:AAG-MvJL1LYYH26tK-9TjRVpLMWTsPNhwB0'
-        chat_id='-555555'
-        send_message_url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
-        params = {
-            'chat_id': chat_id,
-            'text': f'client: {client.name}, representant: {client.represent} => {"Non" if cmndfromclient else "Oui"}, total: {order.total}'
-        }
-        response = req.get(send_message_url, params=params)
-        if response.status_code == 200:
-            print('Message sent successfully!')
-        else:
-            print('Failed to send message:', response.text)
+        # bot_token='7266453006:AAG-MvJL1LYYH26tK-9TjRVpLMWTsPNhwB0'
+        # chat_id='-555555'
+        # send_message_url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
+        # params = {
+        #     'chat_id': chat_id,
+        #     'text': f'client: {client.name}, representant: {client.represent} => {"Non" if cmndfromclient else "Oui"}, total: {order.total}'
+        # }
+        # response = req.get(send_message_url, params=params)
+        # if response.status_code == 200:
+        #     print('Message sent successfully!')
+        # else:
+        #     print('Failed to send message:', response.text)
 
         # totalremise=request.POST.get('totalremise', 0)
         
@@ -752,6 +753,7 @@ def productscategories(request, id):
     c=Category.objects.get(pk=id)
     
     products=Produit.objects.filter(category_id=id, isactive=True).order_by('code')
+    print('>>>>>>products', products)
     # get group of the request user
     newproducts=Produit.objects.filter(isnew=True)
     nested_products = [[products[i], products[i+1]] for i in range(0, len(products)-1, 2)]
@@ -760,19 +762,19 @@ def productscategories(request, id):
     result = [nested_products[i:i+2] for i in range(0, len(nested_products), 2)]
     
     group=request.user.groups.first().name
-    if group=='salsemen':
-        if request.user.represent in c.excludedrep.all():
-            products=[]
-        else:
-            if c.affichage=='double':
-                print('>>>>>>>>><<double')
-                products=[products[i:i+8] for i in range(0, len(products), 8)]
-                print('>>>>>>>>><<double', products)
-            else:
-                products=[products[i:i+4] for i in range(0, len(products), 4)]
-    elif group=='clients':
-        if c.masqueclients:
-            products=[]
+    # if group=='salsemen':
+    #     if request.user.represent in c.excludedrep.all():
+    #         products=[]
+    #     else:
+    #         if c.affichage=='double':
+    #             print('>>>>>>>>><<double')
+    #             products=[products[i:i+8] for i in range(0, len(products), 8)]
+    #             print('>>>>>>>>><<double', products)
+    #         else:
+    #             products=[products[i:i+4] for i in range(0, len(products), 4)]
+    # elif group=='clients':
+    #     if c.masqueclients:
+    #         products=[]
     ctx={
             'products':products, 
             'title':'Produits de '+str(c), 
