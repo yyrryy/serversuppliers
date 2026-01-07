@@ -310,7 +310,7 @@ class Order(models.Model):
     client=models.ForeignKey(Client, on_delete=models.CASCADE, default=None, null=True)
     order_no=models.CharField(max_length=500, null=True, default=None)
     # if sent to server it's gonna be true
-    senttoserver=models.BooleanField(default=False)
+    senttoserver=models.BooleanField(default=True)
     # order by date
     def __str__(self) -> str:
         return f'{self.client.name} {self.senttoserver}'
@@ -625,7 +625,9 @@ class Returnedsupplier(models.Model):
 
 
 class Ordersnotif(models.Model):
-    user=models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    length=models.IntegerField(default=0)
+    # catch the orders json from server
+    orders=models.JSONField(default=list, null=True, blank=True)
     isread=models.BooleanField(default=False)
 
 class Connectedusers(models.Model):
