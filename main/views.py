@@ -92,7 +92,7 @@ def searchrefphone(request):
                     </div>
                     <div class="suggestions__product-info">
                         <div class="suggestions__product-name">
-                        <strong class="text-blue">{i.ref.upper()}</strong>  <strong style="margin-left:75px;">Résultats de rercherche pour: {ref}</strong><br>
+                        <strong class="text-blue">{i.ref.upper()}</strong>  <div class="status {status}"></div><strong 
                         <strong style="color:red;">{i.refeq1.upper() if i.refeq1 else ''}</strong> <br>
                         <strong style="color:blue;">{i.refeq2.upper() if i.refeq2 else ''}</strong> <br>
                         <strong style="color:blue;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
@@ -100,7 +100,7 @@ def searchrefphone(request):
                         </div>
                         <div class="suggestions__product-name"> {i.name} </div>
                         <div class="d-flex justify-content-between">
-                            <div class="status {status}"></div>
+                            
                             
 
                             
@@ -959,8 +959,8 @@ def aboutus(request):
 
 @user_passes_test(tocatalog, login_url='main:loginpage')
 def cart(request):
-    clients=Client.objects.all()
-    return render(request, 'cart.html', {'title':'Panier', 'clients':clients})
+    items=Cartitems.objects.filter(cart__user=request.user)
+    return render(request, 'cart.html', {'title':'Panier', 'items':items})
 
 def developer(request):
     return render(request, 'me.html', {'title':'Develper - abdelwahed ait ali'})

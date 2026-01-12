@@ -12,7 +12,10 @@
           <div class="loadingcartitems flex-column align-items-center justify-content-center w-100 h-100 top-0 bg-dark200" style="z-index:1199; position: absolute;">
             <div class="spinner-border text-light"></div>
         </div>
-        
+         <div class="d-flex p-2">
+	      <input class="form-control transportcmnd" placeholder="Note" style="border-radius:10px;"/>
+      <button class="btn btn-primary text-white" onclick="validercmdinheader(event)">Valider</button>
+	</div>
           <table class="table table-bordered table-responsive">
             <thead style="position: sticky;top: 0; background: #80808052;">
               <tr class="">
@@ -21,7 +24,7 @@
                 <th class="">Prix</th>
                 <th class="">Remise</th>
                 <th class="">Quantité</th>
-                <th class="">Note</th>
+                <th class=""></th>
                 <th class=""></th>
               </tr>
             </thead>
