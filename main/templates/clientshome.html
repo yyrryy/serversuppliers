@@ -38,7 +38,12 @@
 	</div>
 	
 </div> -->
-<div class="position-relative">
+<div class="owl-carousel mt-3 px-5">
+	{% for i in promotions %}
+	<img src="{{i.image.url}}" alt="">
+	{% endfor %}
+</div>
+<div class="position-relative " style="margin: 10px 5em;">
 	<div class="page home-page bg-darkblue" style="height:80vh; overflow:scroll;">
 		<div class="page-contents">
 		  <div class="categories-list categories-list--layout--columns-4-sidebar">
@@ -98,8 +103,8 @@
 		  </ul>
 		</div>
 		</div>
-	  </div>
-	
+	</div>
+</div>
 	<!-- products holder -->
 
 
