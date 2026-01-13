@@ -676,8 +676,7 @@
       <button class="mobile-header__menu-button" type="button">
         <svg width="18px" height="14px"><path d="M-0,8L-0,6L18,6L18,8L-0,8ZM-0,-0L18,-0L18,2L-0,2L-0,-0ZM14,14L-0,14L-0,12L14,12L14,14Z"></path></svg>
       </button>
-      <button class="mobile-header__menu-button bi bi-house text-white" type="button">
-        <a href="/catalogpage"></a>
+      <button class="btn bi bi-house text-white" type="button" onclick="location.href='/catalogpage'">
       </button>
     </div>
     {% if user.groups.all.0.name != 'accounting' %}
