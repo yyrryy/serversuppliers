@@ -505,7 +505,9 @@ def updatepassword(request):
 @user_passes_test(tocatalog, login_url='main:loginpage')
 @login_required(login_url='main:loginpage')
 def commande(request):
+    print("client", request.POST.get('client'))
     client=Client.objects.get(pk=request.POST.get('client'))
+
     # clientname=request.POST.get('clientname')
     # clientaddress=request.POST.get('clientaddress')
     # clientphone=request.POST.get('clientphone')

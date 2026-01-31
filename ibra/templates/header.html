@@ -3,6 +3,7 @@
 {% allcategories as pp %}
 {% firstctg as firstctg %}
 <header class="site__header" data-select2-id="42">
+  <div hidden class="clientidholder" clientid="{{user.client.id}}"></div>
   <input type="hidden" class="clientid" name="clientid" value="{{user.client.id}}">
   <input type="hidden" class="cmndfromclient" name="clientid" value="true">
   <div class="header" data-select2-id="41">
@@ -724,10 +725,9 @@
         </div>
       </div>
     </div>
-    {% if user.groups.all.0.name != 'admin' %}
     <div class="header__indicators align-items-center">
       <div class="me-5 d-flex align-items-center">
-
+        
         {% if user.groups.all.0.name == 'clients'%}
         <input type="hidden" class="clientid" name="clientid" value="{{user.client.id}}">
         <div hidden class="clientidholder text-white border rounded p-2" clientid="{{user.client.id}}">
@@ -738,9 +738,7 @@
         <div  class="clientidholder text-white border rounded p-2" clientid="">
         </div>
         <input type="hidden" class="clientid" name="clientid" value="0">
-        
         <input type="hidden" class="cmndfromclient" value="false">
-  
         {% endif %}
         <!-- <div class="d-flex flex-column p-2" style="width:12em;">
               <input class="form-control transportcmnd" placeholder="Transport" />
@@ -810,7 +808,6 @@
       </div>
       
     </div>
-    {% endif %}
     {% endif %}
 
   </div>

@@ -562,12 +562,12 @@
         {% if user.username %}
 
         {% if user.groups.all.0.name == 'clients' %}
-        <a href="https://web.whatsapp.com/send/?phone={{user.client.represent.phone}}&text&type=phone_number&app_absent=0" class="float bounce" target="_blank">
+        <!-- <a href="https://web.whatsapp.com/send/?phone={{user.client.represent.phone}}&text&type=phone_number&app_absent=0" class="float bounce" target="_blank">
         <img src="/media/whatsapp.png" style="width: 100%">
-        </a>
+        </a> -->
         {% endif %}
         <!-- mobile site__header -->
-        {% include "mobileheader.html" %}
+        
         {% include "header.html" %}
         {% endif %}
         <!-- site__body -->
@@ -865,7 +865,9 @@
     <script src="/static/js/datepicker.js"></script>
     <script>
       
-
+      function displayimage(event, imgsrc){
+        $('.imgproductmodal').attr("src", imgsrc)
+      }
       function filtersearch(event){
         var $el = $('.productsbrand' + $(event.target).attr('id')).fadeIn(450);
         $('.searchresults > div').not($el).hide();
