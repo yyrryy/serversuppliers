@@ -116,17 +116,18 @@
                         - {{i.name}} {%if i.diametre%}<span class="text-primary">{{i.diametre}}</span>{%endif%}
                       </div>
                     </div>
+                    <div class="text-success">
+                      {%if i.refeq1%}{{i.refeq1}} {%endif%}
+                      {%if i.refeq2%}{{i.refeq2}} {%endif%}
+                      {%if i.refeq3%}{{i.refeq3}} {%endif%}
+                    </div>
                     <div class="product-card__rating d-flex justify-content-between align-items-center">
                       
                       <div class="disponible" style="border-radius: 50%; width: 20px; height: 20px; background: {% if i.stocktotal <= 0%}red{%elif i.stocktotal <= 0 %}orange{%else%}green{%endif%};"></div>
                       
                       <div class="d-flex"> {% for c in i.carlogos.all  %} {% if c.image %} <img src="{{c.image.url}}" style="width:50px;"> {% endif %} {% endfor %} </div>
                     </div>
-                    <div class="text-success">
-                      {%if i.refeq1%}{{i.refeq1}} {%endif%}
-                      {%if i.refeq2%}{{i.refeq2}} {%endif%}
-                      {%if i.refeq3%}{{i.refeq3}} {%endif%}
-                    </div>
+                    
                     <div class="d-flex justify-content-between p-2">
                       <div style="height: 65px; overflow-y: scroll; width: 100%;">
                          {% for a in i.getcars %} <strong>
