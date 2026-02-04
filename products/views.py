@@ -3465,6 +3465,7 @@ def createclientaccount(request):
 
 def createrepaccount(request):
     repid=request.GET.get('repid')
+    print('repid', repid)
     rep= Represent.objects.get(pk=repid)
     username=request.GET.get('username')
     password=request.GET.get('password')
