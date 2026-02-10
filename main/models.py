@@ -271,6 +271,8 @@ class Client(models.Model):
     phone2=models.CharField(max_length=200, default=None, null=True)
     diver=models.BooleanField(default=False)
     accesscatalog=models.BooleanField(default=False)
+    def __str__(self) -> str:
+        return f"{self.name} {self.code}"
 class Represent(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, default=None, null=True)
     name=models.CharField(max_length=50)
