@@ -41,7 +41,7 @@
 <div class="position-relative " style="margin: 10px 5em;">
 	<div class="owl-carousel mt-3 px-5">
 		{% for i in newproducts %}
-		<div class="card rounded bg-white d-flex flex-column" style="height: 17em;">
+		<div class="card rounded bg-white d-flex flex-column" style="height: 25em;">
 			<a href="/product/{{i.id}}" class="d-flex flex-column border p-2">
 				<img src="{% if i.image%} {{i.image.url}} {% endif %}" alt="" class="rounded" />
 			</a>
