@@ -217,7 +217,7 @@ $('.cmnd').each((i, el)=>{
         //min is remise
         min=$(el).attr('pdctremise')
         // get nearest item
-
+        console.log("sdfsdf:", $(el).parent())
         let qty = $(el).parent().find('.input-number > .input-number__input').val()
         console.log(name, ctg, ref, qty, pr, id, img, min)
         // add new row to coommand table

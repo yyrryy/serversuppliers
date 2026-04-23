@@ -38,12 +38,27 @@
 	</div>
 	
 </div> -->
-<div class="owl-carousel mt-3 px-5">
-	{% for i in promotions %}
-	<img src="{{i.image.url}}" alt="">
-	{% endfor %}
-</div>
 <div class="position-relative " style="margin: 10px 5em;">
+	<div class="owl-carousel mt-3 px-5">
+		{% for i in newproducts %}
+		<div class="card rounded bg-white d-flex flex-column" style="height: 17em;">
+			<a href="/product/{{i.id}}" class="d-flex flex-column border p-2">
+				<img src="{% if i.image%} {{i.image.url}} {% endif %}" alt="" class="rounded" />
+			</a>
+			<div class="p-2">
+			<div class="d-flex justify-content-between mb-2">
+				
+			<strong class="text-darkblue">{{i.ref.upper}}</strong>
+			<img src='{% if i.mark.image%} {{i.mark.image.url}} {% endif %}' style="width: 70px">
+			</div>
+			<strong class="card-text text-darkblue">{{i.name}}</strong>
+			<!-- <strong class="text-darkblue">{{i.sellprice}} ({% if i.remise > 0 %}{{i.remise}}{%else%}NET{%endif%})</strong> -->
+
+		</div>
+			<!-- <a href="/product/{{i.id}}" class="btn btn-primary w-100 mt-auto">Nouveau</a>-->
+		</div> 
+		{% endfor %}
+	</div>
 	<div class="page home-page bg-darkblue" style="height:80vh; overflow:scroll;">
 		<div class="page-contents">
 		  <div class="categories-list categories-list--layout--columns-4-sidebar">

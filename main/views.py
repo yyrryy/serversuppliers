@@ -521,18 +521,47 @@ def commande(request):
         for i in cartitems:
             if request.user.groups.first().name=='clients':
                 if i.product.stocktotal>0:
-                    totalofdispounible+=round(i.product.sellprice * i.qty, 2)
-                    item={
-                        'ref':i.product.ref,
-                        'name':i.product.name,
-                        'qty':i.qty,
-                        'price':i.product.sellprice,
-                        'total':round(i.product.sellprice * i.qty, 2),
-                        'remise':i.product.remise,
-                        'productid':i.product.id,
-                        'uniqcode':i.product.uniqcode
-                    }
-                    itemsdisponible.append(item)
+                    diff = int(i.qty) - int(i.product.stocktotal)
+                    # commande = 10 stock = 6, dispo 6(stock) reliquat diff = 4
+                    if diff > 0:
+                        totalofdispounible+=round(i.product.sellprice * i.product.stocktotal, 2)
+                        item={
+                            'ref':i.product.ref,
+                            'name':i.product.name,
+                            'qty':i.product.stocktotal,
+                            'price':i.product.sellprice,
+                            'total':round(i.product.sellprice * i.qty, 2),
+                            'remise':i.product.remise,
+                            'productid':i.product.id,
+                            'uniqcode':i.product.uniqcode
+                        }
+                        itemsdisponible.append(item)
+                        totalofnotdispounible+=round(i.product.sellprice * diff, 2)
+                        item={
+                            'ref':i.product.ref,
+                            'name':i.product.name,
+                            'qty':diff,
+                            'price':i.product.sellprice,
+                            'total':round(i.product.sellprice * diff, 2),
+                            'remise':i.product.remise,
+                            'uniqcode':i.product.uniqcode,
+                            'productid':i.product.id,
+                        }
+                        itemsnotdisponible.append(item)
+                    # else c = 3 or c = 6 and dispo = 6 means the c in stock
+                    else:
+                        totalofdispounible+=round(i.product.sellprice * i.qty, 2)
+                        item={
+                            'ref':i.product.ref,
+                            'name':i.product.name,
+                            'qty':i.qty,
+                            'price':i.product.sellprice,
+                            'total':round(i.product.sellprice * i.qty, 2),
+                            'remise':i.product.remise,
+                            'productid':i.product.id,
+                            'uniqcode':i.product.uniqcode
+                        }
+                        itemsdisponible.append(item)
                     i.delete()
                 # else:
                 #     totalofnotdispounible+=i.total
@@ -541,19 +570,49 @@ def commande(request):
                 
             else:
                 if i.product.stocktotal>0:
-                    totalofdispounible+=round(i.product.sellprice * i.qty, 2)
-                    item={
-                        'ref':i.product.ref,
-                        'name':i.product.name,
-                        'qty':i.qty,
-                        'price':i.product.sellprice,
-                        'total':round(i.product.sellprice * i.qty, 2),
-                        'remise':i.product.remise,
-                        'productid':i.product.id,
-                        'uniqcode':i.product.uniqcode
-                    }
-                    itemsdisponible.append(item)
+                    diff = int(i.qty) - int(i.product.stocktotal)
+                    # commande = 10 stock = 6, dispo 6(stock) reliquat diff = 4
+                    if diff > 0:
+                        totalofdispounible+=round(i.product.sellprice * i.product.stocktotal, 2)
+                        item={
+                            'ref':i.product.ref,
+                            'name':i.product.name,
+                            'qty':i.product.stocktotal,
+                            'price':i.product.sellprice,
+                            'total':round(i.product.sellprice * i.qty, 2),
+                            'remise':i.product.remise,
+                            'productid':i.product.id,
+                            'uniqcode':i.product.uniqcode
+                        }
+                        itemsdisponible.append(item)
+                        totalofnotdispounible+=round(i.product.sellprice * diff, 2)
+                        item={
+                            'ref':i.product.ref,
+                            'name':i.product.name,
+                            'qty':diff,
+                            'price':i.product.sellprice,
+                            'total':round(i.product.sellprice * diff, 2),
+                            'remise':i.product.remise,
+                            'uniqcode':i.product.uniqcode,
+                            'productid':i.product.id,
+                        }
+                        itemsnotdisponible.append(item)
+                    # else c = 3 or c = 6 and dispo = 6 means the c in stock
+                    else:
+                        totalofdispounible+=round(i.product.sellprice * i.qty, 2)
+                        item={
+                            'ref':i.product.ref,
+                            'name':i.product.name,
+                            'qty':i.qty,
+                            'price':i.product.sellprice,
+                            'total':round(i.product.sellprice * i.qty, 2),
+                            'remise':i.product.remise,
+                            'productid':i.product.id,
+                            'uniqcode':i.product.uniqcode
+                        }
+                        itemsdisponible.append(item)
                     i.delete()
+                # else stock is 0 commande should be reliquat
                 else:
                     totalofnotdispounible+=round(i.product.sellprice * i.qty, 2)
                     item={
@@ -581,6 +640,10 @@ def commande(request):
             order=Order.objects.create(client=client, salseman=client.represent,  modpymnt='--', modlvrsn='--',total=totalofdispounible, isclientcommnd=True, note=notesorder, senttoserver=False)
             for i in itemsdisponible:
                 Orderitem.objects.create(order=order, ref=i['ref'], name=i['name'], qty=int(i['qty']), product_id=i['productid'], remise=i['remise'], price=i['price'], total=i['total'])
+            if len(itemsnotdisponible)>0:
+                reliquatorder=Order.objects.create(client=client, salseman=client.represent,  modpymnt='--', modlvrsn='--',total=totalofdispounible, isclientcommnd=True, note=notesorder+' Reliquat', senttoserver=False)
+                for i in itemsnotdisponible:
+                    Orderitem.objects.create(order=reliquatorder, ref=i['ref'], name=i['name'], qty=int(i['qty']), product_id=i['productid'], remise=i['remise'], price=i['price'], total=i['total'])
             # try:
             #     req.get('http://localserver/commandfromserver', {'items':json.dumps(itemsdisponible), 'clientcode':client.code, 'total':totalofdispounible, 'notesorder':notesorder, 'cmndfromclient':cmndfromclient, 'userid':request.user.id})
             # except:
@@ -777,13 +840,23 @@ def productscategories(request, id):
     # elif group=='clients':
     #     if c.masqueclients:
     #         products=[]
+    nextctg = None
+    previousctg = None
+    try:
+        nextctg = Category.objects.filter(code__gt=c.code).order_by('code').first()
+    except:
+        pass
+    try:
+        previousctg = Category.objects.filter(code__lt=c.code).order_by('-code').first()
+    except:
+        pass    
     ctx={
             'products':products, 
             'title':'Produits de '+str(c), 
             'category':c,
             'newproducts':newproducts,
-            'nextctg' : Category.objects.filter(code__gt=c.code).order_by('code').first(),
-            'previousctg' : Category.objects.filter(code__lt=c.code).order_by('-code').first() 
+            'nextctg' : nextctg,
+            'previousctg' : previousctg 
         }
     return render(request, 'products.html', ctx)
 
@@ -1204,6 +1277,7 @@ def updatecartitem(request):
     item.total=total
     item.save()
     cart.save()
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>cart total", cart.total)
     return JsonResponse({
         'success':True
     })

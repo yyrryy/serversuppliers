@@ -2,355 +2,772 @@
 
 {% load static %}
 {% block css %}
+<style>
+  :root {
+    --primary: #0F172A;
+    --primary-foreground: #FFFFFF;
+    --secondary: #F1F5F9;
+    --secondary-foreground: #0F172A;
+    --accent: #2563EB;
+    --accent-foreground: #FFFFFF;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --background: #FFFFFF;
+    --card: #FFFFFF;
+    --radius: 0.75rem;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .product-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent);
+  }
+
+  .breadcrumb span {
+    color: var(--primary);
+    font-weight: 500;
+  }
+
+  /* Main Grid */
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .product-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Gallery */
+  .product-gallery {
+    position: relative;
+  }
+
+  .gallery-main {
+    position: relative;
+    background: var(--secondary);
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-in;
+  }
+
+  .gallery-main img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s;
+  }
+
+  .gallery-main:hover img {
+    transform: scale(1.05);
+  }
+
+  .sale-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--danger);
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Product Info */
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .product-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .product-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .product-name {
+    font-size: 1rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .brand-logo {
+    height: 2.5rem;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Stock Indicator */
+  .stock-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .stock-dot {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+  }
+
+  .stock-dot--in {
+    background: var(--success);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  }
+
+  .stock-dot--low {
+    background: var(--warning);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  }
+
+  .stock-dot--out {
+    background: var(--danger);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  }
+
+  .stock-text--in {
+    color: var(--success);
+  }
+
+  .stock-text--low {
+    color: var(--warning);
+  }
+
+  .stock-text--out {
+    color: var(--danger);
+  }
+
+  /* Price Section */
+  .price-section {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .price-current {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .price-discount {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .price-label {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* Specs Grid */
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--secondary);
+    border-radius: var(--radius);
+  }
+
+  .spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .spec-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .spec-value {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  /* Compatible Cars */
+  .compatible-cars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .car-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    background: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    color: var(--primary);
+    font-weight: 500;
+  }
+
+  /* Add to Cart */
+  .cart-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .quantity-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .quantity-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--background);
+  }
+
+  .quantity-input button {
+    width: 2.75rem;
+    height: 2.75rem;
+    border: none;
+    background: transparent;
+    font-size: 1.25rem;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quantity-input button:hover {
+    background: var(--secondary);
+    color: var(--primary);
+  }
+
+  .quantity-input input {
+    width: 3.5rem;
+    text-align: center;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: transparent;
+  }
+
+  .quantity-input input:focus {
+    outline: none;
+  }
+
+  .btn-cart {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 0 1.5rem;
+    height: 2.75rem;
+    background: var(--accent);
+    color: var(--accent-foreground);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-cart:hover {
+    background: #1D4ED8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-cart svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .btn-cancel {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: none;
+  }
+
+  .btn-cancel.show {
+    display: block;
+  }
+
+  .btn-cancel:hover {
+    background: rgba(239, 68, 68, 0.1);
+  }
+
+  /* Tabs Section */
+  .tabs-section {
+    margin-top: 3rem;
+  }
+
+  .tabs-header {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    padding: 1rem 1.5rem;
+    background: transparent;
+    border: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.2s;
+  }
+
+  .tab-btn:hover {
+    color: var(--primary);
+  }
+
+  .tab-btn.active {
+    color: var(--accent);
+  }
+
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .tab-content {
+    display: none;
+    padding: 1.5rem 0;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  /* Equivalent References */
+  .references-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .reference-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--secondary);
+    border-radius: var(--radius);
+    font-family: monospace;
+    font-size: 0.9375rem;
+    color: var(--primary);
+    max-width: fit-content;
+  }
+
+  .reference-item svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--muted);
+  }
+
+  /* Dimensions */
+  .dimensions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .dimension-card {
+    padding: 1rem;
+    background: var(--secondary);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+
+  .dimension-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  /* Similar Products Table */
+  .similar-products {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .products-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+  }
+
+  .products-table th {
+    text-align: left;
+    padding: 1rem;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .products-table th:first-child {
+    border-radius: var(--radius) 0 0 0;
+  }
+
+  .products-table th:last-child {
+    border-radius: 0 var(--radius) 0 0;
+  }
+
+  .products-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    font-size: 0.9375rem;
+  }
+
+  .products-table tr:hover td {
+    background: var(--secondary);
+  }
+
+  .product-thumb {
+    width: 4rem;
+    height: 4rem;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    background: var(--secondary);
+    cursor: pointer;
+  }
+
+  .product-ref-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .product-ref-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .product-ref-link:hover {
+    color: #1D4ED8;
+    text-decoration: underline;
+  }
+
+  .brand-thumb {
+    height: 2rem;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .car-thumb {
+    height: 1.5rem;
+    width: auto;
+    object-fit: contain;
+    margin-left: 0.5rem;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 640px) {
+    .product-title {
+      font-size: 1.375rem;
+    }
+
+    .price-current {
+      font-size: 1.5rem;
+    }
+
+    .specs-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .quantity-row {
+      flex-direction: column;
+    }
+
+    .quantity-input {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-cart {
+      width: 100%;
+    }
+  }
+</style>
 {% endblock %}
 
 {% block content %}
+<div class="product-page">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a href="/">Accueil</a>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    {% if product.category %}
+    <a href="/category/{{ product.category.id }}">{{ product.category.title }}</a>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    {% endif %}
+    <span>{{ product.ref|upper }}</span>
+  </nav>
 
-<div class="block-split">
-    <div class="container">
-      <div class="block-split__row no-gutters">
-        <div class="block-split__item block-split__item-content col-auto">
-          <div class="product product--layout--full">
-            <div class="product__body">
-              <div class="product__card product__card--one"></div>
-              <div class="product__card product__card--two"></div>
-              <div class="product-gallery product-gallery--layout--product-full product__gallery p-0" data-layout="product-full">
-                <div class="product-gallery__featured">
-                  <!-- <button data-toggle="modal" data-target="#imagedisplaymodal" class="product-gallery__zoom imagedisplaybtn" imgsrc="{{product.image}}">
-                    <svg width="24" height="24">
-                      <path d="M15,18c-2,0-3.8-0.6-5.2-1.7c-1,1.3-2.1,2.8-3.5,4.6c-2.2,2.8-3.4,1.9-3.4,1.9s-0.6-0.3-1.1-0.7
-      c-0.4-0.4-0.7-1-0.7-1s-0.9-1.2,1.9-3.3c1.8-1.4,3.3-2.5,4.6-3.5C6.6,12.8,6,11,6,9c0-5,4-9,9-9s9,4,9,9S20,18,15,18z M15,2
-      c-3.9,0-7,3.1-7,7s3.1,7,7,7s7-3.1,7-7S18.9,2,15,2z M16,13h-2v-3h-3V8h3V5h2v3h3v2h-3V13z"></path>
-                    </svg>
-                  </button> -->
-                  <a class="image image--type--product" data-width="700" data-height="700">
-                    <div class="">
-                      
-                      <img style="width:100%;" src="{% if product.image %}{{product.image.url}}{% else %}/media/default.png{% endif %}" alt="{{ i.name }}" loading="lazy" data-toggle="modal" data-target="#imagedisplaymodal" class="imagedisplaybtn">
-                      
-                    </div></a>
-                </div>
-                
-              </div>
-              <div class="product__header p-0">
-                <h1 class="product__title">{{product.ref.upper}}</h1>
-                <div class="d-flex justify-content-between">
-                  <div>
-                    <strong>
-                      {{product.refeq1}}
-                    </strong> <br>
-                    <strong>
-                      {{product.refeq2}}
-                    </strong> <br>
-                    <strong>
-                      {{product.refeq3}}
-                    </strong>
-                    <br>
-                    <strong style="color: blue">
-                      Diametre: {{product.diametre}}
-                    </strong>
-                    <br>
-                    <strong>
-                      {{product.name}}
-                    </strong>
-                  </div>
-                  
-                </div>
-                  <div class="ms-3">
-                    {% for i in cars %}
-                    <div>
-                      {{i}}
-                    </div>
-                    {% endfor %}
+  <!-- Main Product Grid -->
+  <div class="product-grid">
+    <!-- Gallery -->
+    <div class="product-gallery">
+      <div class="gallery-main" data-toggle="modal" data-target="#imagedisplaymodal">
+        {% if product.isoffer %}
+        <span class="sale-badge">{{ product.offre }}</span>
+        {% endif %}
+        <img 
+          src="{% if product.image %}{{ product.image.url }}{% else %}/media/default.png{% endif %}" 
+          alt="{{ product.name }}" 
+          loading="lazy" 
+          class="imagedisplaybtn"
+        >
+      </div>
+    </div>
 
-                  </div>
-              </div>
-              <div>
-              </div>
-              <div class="product__info">
+    <!-- Product Info -->
+    <div class="product-info">
+      <!-- Header -->
+      <div class="product-header">
+        {% if product.mark.image %}
+        <img src="{{ product.mark.image.url }}" alt="Marque" class="brand-logo">
+        {% endif %}
+        <h1 class="product-title">{{ product.ref|upper }}</h1>
+        <p class="product-name">{{ product.name }}</p>
+      </div>
 
-                <div class="product__info-card">
-                  <div class="product__info-body">
-                    {% if product.isoffer %}
-                    <div class="product__badge tag-badge tag-badge--sale">
-                      <strong>
-                        {{product.offre}}
-                      </strong>
-                    </div>
-                    {% endif %}
-                    <div class="product__prices-stock">
-                      <div class="product__prices">
-                        <div class="product__price product__price--current">
-                          {% if product.remise != 0 %}
-                          <div >
-                            
-                            {{product.sellprice|floatformat:2}} 
-                          </div>
-                          <div class="text-danger" >({{product.remise}}%)</div>
-                          {% else %}
-                          <div >
-                            {{product.prixnet|floatformat:2}}
-                          </div>
-                          <div class="text-danger" >(NET)</div>
-                          {% endif %}
+      <!-- Stock -->
+      <div class="stock-indicator">
+        {% if product.stocktotal <= 0 %}
+        <span class="stock-dot stock-dot--out"></span>
+        <span class="stock-text--out">Rupture de stock</span>
+        {% elif product.stocktotal <= 5 %}
+        <span class="stock-dot stock-dot--low"></span>
+        <span class="stock-text--low">Stock faible ({{ product.stocktotal }} restants)</span>
+        {% else %}
+        <span class="stock-dot stock-dot--in"></span>
+        <span class="stock-text--in">En stock</span>
+        {% endif %}
+      </div>
 
-                        </div>
-                      </div>
-                      {% if product.stocktotal <= 0 %}
-                    <div style="width:20px; height:20px; border-radius:50%; background:red;" ></div>
-                    {% else %}
-                      {% if product.stocktotal <= 5 %}
-                      <div style="width:20px; height:20px; border-radius:50%; background:orange;" ></div>
-                        
-                        {% else %}
-                        <div style="width:20px; height:20px; border-radius:50%; background:green;" >
-                        </div>
-                      {% endif %}
-                          
-                    {% endif %}
-                      
-                    </div>
-                    <div class="product__meta">
-                      <table>
-                        <tbody>
-                          
-                          <tr>
-                            <th>Marque</th>
-                            <td>
-                              <!-- hint: link to mark to display all products in mark -->
-                              {% if product.mark.image %}
-                              <img src="{{product.mark.image.url}}" width="100">
-                              {% endif %}
-                            </td>
-                            
-                          </tr>
-                          <tr>
-                           <th>Diametre</th>
-                           <td>{{product.diametre}}</td>
-                          </tr>
-                          <tr>
-                            <td class="text-center">
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <!-- <div class="product-form product__form">
-                    <div class="product-form__body">
-                      <div class="product-form__row">
-                        <div class="product-form__title">Material</div>
-                        <div class="product-form__control">
-                          <div class="input-radio-label">
-                            <div class="input-radio-label__list">
-                              <label class="input-radio-label__item">
-                                <input type="radio" name="material" class="input-radio-label__input">
-                                <span class="input-radio-label__title">Steel</span>
-                              </label>
-                              <label class="input-radio-label__item">
-                                <input type="radio" name="material" class="input-radio-label__input">
-                                <span class="input-radio-label__title">Aluminium</span>
-                              </label>
-                              <label class="input-radio-label__item">
-                                <input type="radio" name="material" class="input-radio-label__input" disabled="disabled">
-                                <span class="input-radio-label__title">Thorium</span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="product-form__row">
-                        <div class="product-form__title">Color</div>
-                        <div class="product-form__control">
-                          <div class="input-radio-color">
-                            <div class="input-radio-color__list">
-                              <label class="input-radio-color__item input-radio-color__item--white" style="color: #fff;" data-toggle="tooltip" title="" data-original-title="White">
-                                <input type="radio" name="color">
-                                <span></span>
-                              </label>
-                              <label class="input-radio-color__item" style="color: #ffd333;" data-toggle="tooltip" title="" data-original-title="Yellow">
-                                <input type="radio" name="color">
-                                <span></span>
-                              </label>
-                              <label class="input-radio-color__item" style="color: #ff4040;" data-toggle="tooltip" title="" data-original-title="Red">
-                                <input type="radio" name="color">
-                                <span></span>
-                              </label>
-                              <label class="input-radio-color__item input-radio-color__item--disabled" style="color: #4080ff;" data-toggle="tooltip" title="" data-original-title="Blue">
-                                <input type="radio" name="color" disabled="disabled">
-                                <span></span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
-                  <div class="product__actions">
-                    
-                    <div class="product__actions-item product__actions-item--addtocart">
-                        <div class="product__actions-item product__actions-item--quantity w-100">
-                            <div class="input-number mb-3">
-                              <input class="form-control input-number__input qty" type="number" min="{%if product.min%}{{product.min}}{%else%}1{%endif%}" value="{%if product.min%}{{product.min}}{%else%}1{%endif%}">
-                              <div class="input-number__add"></div>
-                              <div class="input-number__sub"></div>
-                            </div>
-                          </div>
-                          <button class="btn btn-primary cmnd w-100" pdct="{{product.id}}" pdctref="{{product.ref}}" pdctname="{{product.name}}" pdctpr="{{product.sellprice}}" pdctid="{{product.id}}" pdctimg="{{product.image}}" pdctremise="{{product.remise|floatformat:-2}}" pdctcategory="{{product.category.title}}">
-                        <svg width="32" height="32">
-                            <circle cx="10.5" cy="27.5" r="2.5"></circle>
-                            <circle cx="23.5" cy="27.5" r="2.5"></circle>
-                            <path d="M26.4,21H11.2C10,21,9,20.2,8.8,19.1L5.4,4.8C5.3,4.3,4.9,4,4.4,4H1C0.4,4,0,3.6,0,3s0.4-1,1-1h3.4C5.8,2,7,3,7.3,4.3
-                  l3.4,14.3c0.1,0.2,0.3,0.4,0.5,0.4h15.2c0.2,0,0.4-0.1,0.5-0.4l3.1-10c0.1-0.2,0-0.4-0.1-0.4C29.8,8.1,29.7,8,29.5,8H14
-                  c-0.6,0-1-0.4-1-1s0.4-1,1-1h15.5c0.8,0,1.5,0.4,2,1c0.5,0.6,0.6,1.5,0.4,2.2l-3.1,10C28.5,20.3,27.5,21,26.4,21z"></path>
-                          </svg>
-                      </button>
-                      <button class="btn btn-info mt-2 d-none anullercmnd w-100" data-id="{{product.id}}" onclick="anullercmnd(event, '{{product.id}}')">
-                        Anuller
-                      </button>
-                    </div>
-                    <div class="product__actions-divider"></div>
-                    <!-- <button class="product__actions-item product__actions-item--wishlist" type="button">
-                      <svg width="16" height="16">
-                        <path d="M13.9,8.4l-5.4,5.4c-0.3,0.3-0.7,0.3-1,0L2.1,8.4c-1.5-1.5-1.5-3.8,0-5.3C2.8,2.4,3.8,2,4.8,2s1.9,0.4,2.6,1.1L8,3.7
-      l0.6-0.6C9.3,2.4,10.3,2,11.3,2c1,0,1.9,0.4,2.6,1.1C15.4,4.6,15.4,6.9,13.9,8.4z"></path>
-                      </svg>
-                      <span>Add to wishlist</span>
-                    </button>
-                    <button class="product__actions-item product__actions-item--compare" type="button">
-                      <svg width="16" height="16">
-                        <path d="M9,15H7c-0.6,0-1-0.4-1-1V2c0-0.6,0.4-1,1-1h2c0.6,0,1,0.4,1,1v12C10,14.6,9.6,15,9,15z"></path>
-                        <path d="M1,9h2c0.6,0,1,0.4,1,1v4c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1v-4C0,9.4,0.4,9,1,9z"></path>
-                        <path d="M15,5h-2c-0.6,0-1,0.4-1,1v8c0,0.6,0.4,1,1,1h2c0.6,0,1-0.4,1-1V6C16,5.4,15.6,5,15,5z"></path>
-                      </svg>
-                      <span>Add to compare</span>
-                    </button> -->
-                  </div>
-                  
-                </div>
-                
-                <!--  free shaipping icons -->
-                
-              </div>
-              <!--  description section  -->
-              <div class="product__tabs product-tabs product-tabs--layout--full">
-                <ul class="product-tabs__list" style="background: var(--darkblue); color: white">
-                  <li class="product-tabs__item">
-                    <a href="#product-tab-description">References Equivalents</a>
-                  </li>
-                  <li class="product-tabs__item">
-                    <a href="#product-tab-specification">Dimenssion</a>
-                  </li>
-                 
-                  <li class="product-tabs__item product-tabs__item--active">
-                    <a href="#product-tab-analogs">Autre Marques</a>
-                  </li>
-                </ul>
-                <div class="product-tabs__content" style="height: 17em;overflow: scroll;">
-                  <div class="product-tabs__pane" id="product-tab-description">
-                    <div class="typography">
-                      {{product.equivalent}}
-                    </div>
-                  </div>
-                  <div class="product-tabs__pane" id="product-tab-specification">
-                    <div class="spec">
-                      
-                      <div class="spec__section">
-                        <div class="spec__row">
-                          <div class="spec__value">{{diamteres.0}}</div>
-                        </div>
-                        <div class="spec__row">
-                          <div class="spec__value">{{diamteres.1}}</div>
-                        </div>
-                        <div class="spec__row">
-                          <div class="spec__value">{{diamteres.2}}</div>
-                        </div>
-                        <div class="spec__row">
-                          <div class="spec__value">{{diamteres.3}}</div>
-                        </div>
-                        <div class="spec__row">
-                          <div class="spec__value">{{diamteres.4}}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="product-tabs__pane product-tabs__pane--active" id="product-tab-analogs">
-                    <table class="analogs-table table table-bordered">
-                      <thead>
-                        <tr class="bg-darkblue text-white">
-                          <th class="analogs-table__column analogs-table__column--name">Image</th>
-                          <th class="analogs-table__column analogs-table__column--name">Ref</th>
-                          <th class="analogs-table__column analogs-table__column--rating">Designation</th>
-                          <th class="analogs-table__column analogs-table__column--vendor">Marque</th>
-                          <th class="analogs-table__column analogs-table__column--price">Prix</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for i in simillars %}
-                        <tr>
-                          <td>
-                            {% if i.image %}
-                            <img  src="{{i.image.url}}" alt="{{ i.name }}" loading="lazy" data-toggle="modal" data-target="#imagedisplaymodal" class="imagedisplaybtn" style="width: 75px">
-                            {% endif %}
-                          </td>
-                          <td class="analogs-table__column analogs-table__column--name">
-                            {% if i.stocktotal %}
-                              {% if i.stocktotal <= 0 %}
-                              <div style="width:20px; height:20px; border-radius:50%; background:red;" ></div>
-                              {% elif i.stocktotal <= 5 %}
-                              <div style="width:20px; height:20px; border-radius:50%; background:orange;" ></div>
-                              {% else %}
-                                  <div style="width:20px; height:20px; border-radius:50%; background:green;" >
-                                  </div>
-                              {% endif %}
-                            {% else %}
-                              <div style="width:20px; height:20px; border-radius:50%; background:red;" >
-                              </div>
-                            {% endif %}
-                            <a href="/product/{{i.id}}" class="analogs-table__product-name">{{i.ref.upper}}</a>
-                            
-                          </td>
-                          <td class="analogs-table__column analogs-table__column--vendor" data-title="Vendor">{{i.name}}
-                          </td>
-                          <td class="analogs-table__column analogs-table__column--rating">
-                            {% if i.mark.image %}
-                            <img src="{{i.mark.image.url}}" width="70" style="width:70px;">
-                            {% endif %}
-                            {% if i.carlogos.image %}
-                            <img src="{{i.carlogos.image.url}}" width="40" style="width:40px;">
-                            {% endif %}
-                          </td>
-                          <td class="analogs-table__column analogs-table__column--price">{% if product.remise != 0 %}
-                          <div >
-                            
-                            {{product.sellprice|floatformat:2}} 
-                          </div>
-                          <div class="text-danger" >({{product.remise}}%)</div>
-                          {% else %}
-                          <div >
-                            {{product.prixnet|floatformat:2}}
-                          </div>
-                          <div class="text-danger" >(NET)</div>
-                          {% endif %}</td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Button trigger modal -->
+      <!-- Price -->
+      <div class="price-section">
+        {% if product.remise != 0 %}
+        <span class="price-current">{{ product.sellprice|floatformat:2 }} DH</span>
+        <span class="price-discount">-{{ product.remise }}%</span>
+        {% else %}
+        <span class="price-current">{{ product.prixnet|floatformat:2 }} DH</span>
+        <span class="price-label">Prix NET</span>
+        {% endif %}
+      </div>
 
-          <div class="block-space block-space--layout--divider-nl"></div>
+      <!-- Specs -->
+      <div class="specs-grid">
+        <div class="spec-item">
+          <span class="spec-label">Reference</span>
+          <span class="spec-value">{{ product.ref|upper }}</span>
         </div>
+        <div class="spec-item">
+          <span class="spec-label">Diametre</span>
+          <span class="spec-value">{{ product.diametre }}</span>
+        </div>
+        {% if product.refeq1 %}
+        <div class="spec-item">
+          <span class="spec-label">Ref. Equiv. 1</span>
+          <span class="spec-value">{{ product.refeq1 }}</span>
+        </div>
+        {% endif %}
+        {% if product.refeq2 %}
+        <div class="spec-item">
+          <span class="spec-label">Ref. Equiv. 2</span>
+          <span class="spec-value">{{ product.refeq2 }}</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Compatible Cars -->
+      {% if cars %}
+      <div>
+        <span class="spec-label" style="display:block;margin-bottom:0.5rem;">Vehicules compatibles</span>
+        <div class="compatible-cars">
+          {% for car in cars %}
+          <span class="car-tag">{{ car }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Add to Cart -->
+      <div class="cart-section">
+        <div class="quantity-row">
+          <div class="quantity-input input-number">
+            <button type="button" class="qty-minus">-</button>
+            <input 
+              type="number" 
+              class="qty input-number__input" 
+              min="{% if product.min %}{{ product.min }}{% else %}1{% endif %}" 
+              value="{% if product.min %}{{ product.min }}{% else %}1{% endif %}"
+            >
+            <button type="button" class="qty-plus">+</button>
+          </div>
+          <button 
+            class="btn-cart cmnd" 
+            pdct="{{ product.id }}" 
+            pdctref="{{ product.ref }}" 
+            pdctname="{{ product.name }}" 
+            pdctpr="{{ product.sellprice }}" 
+            pdctid="{{ product.id }}" 
+            pdctimg="{{ product.image }}" 
+            pdctremise="{{ product.remise|floatformat:-2 }}" 
+            pdctcategory="{{ product.category.title }}"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+          </button>
+        </div>
+        <button 
+          class="btn-cancel anullercmnd d-none" 
+          data-id="{{ product.id }}" 
+          onclick="anullercmnd(event, '{{ product.id }}')"
+        >
+          Annuler
+        </button>
       </div>
     </div>
   </div>
 
+  
+</div>
+
+<script>
+// Tab functionality
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const tabId = this.dataset.tab;
+    
+    // Update buttons
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    
+    // Update content
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+  });
+});
+
+// Quantity controls
+document.querySelector('.qty-minus')?.addEventListener('click', function() {
+  const input = document.querySelector('.qty');
+  const min = parseInt(input.min) || 1;
+  const current = parseInt(input.value) || min;
+  if (current > min) {
+    input.value = current - 1;
+  }
+});
+
+document.querySelector('.qty-plus')?.addEventListener('click', function() {
+  const input = document.querySelector('.qty');
+  const current = parseInt(input.value) || 1;
+  input.value = current + 1;
+});
+</script>
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'js/catalog.js' %} "></script>
+<script src="{% static 'js/catalog.js' %}"></script>
 {% endblock %}

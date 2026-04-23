@@ -211,6 +211,7 @@ def updatesupplier(request):
     })
 
 def addoneproduct(request):
+    print("wwwwwwwwwwwwwwwwwwwwww")
     try:
         ref=request.GET.get('ref').lower().strip()
         name=request.GET.get('name').strip()
@@ -260,7 +261,7 @@ def addoneproduct(request):
             isactive=True
         )
 
-        
+        print("dfsdddddds")
         return JsonResponse({
             'success':True,
         })
