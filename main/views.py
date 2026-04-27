@@ -314,7 +314,7 @@ def clientshome(request):
         'clients':Client.objects.all(),
         'marques':marks,
         'promotions':Promotion.objects.order_by('info').exclude(info__startswith='ARRIVAGE').exclude(info=''),
-        'arrivage':Promotion.objects.filter(info__startswith='ARRIVAGE'),
+        'arrivage':Promotion.objects.all(),
         'newproducts':Produit.objects.filter(isnew=True).order_by('category')
     }
     return render(request, 'clientshome.html', ctx)

@@ -643,8 +643,7 @@ class Connectedusers(models.Model):
 class Promotion(models.Model):
     image=models.ImageField(upload_to='categories_images/', null=True, blank=True)
     info=models.CharField(max_length=500, default=None, null=True, blank=True)
-    def __str__(self) -> str:
-        return self.info
+    
 class UserSession(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     def __str__(self) -> str:
