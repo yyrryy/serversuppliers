@@ -2,7 +2,7 @@
 {% load global_tags %}
 {% allcategories as pp %}
 {% firstctg as firstctg %}
-<header class="site__header" data-select2-id="42">
+<header class="site__header" data-select2-id="42" style="background: #016;">
   <div hidden class="clientidholder" clientid="{{user.client.id}}"></div>
   <input type="hidden" class="clientid" name="clientid" value="{{user.client.id}}">
   <input type="hidden" class="cmndfromclient" name="clientid" value="true">
@@ -71,7 +71,7 @@
    </div>
 </div>
    </div>
-   <div class="header__navbar-menu">
+   <!-- <div class="header__navbar-menu">
       <div class="main-menu">
          Gzenaya auto parts - Bloc 4 N° 45 Agdal Ait Melloul Agadir - gzenaya.ae@gmail.com
       </div>
@@ -81,7 +81,7 @@
          <div class="phone__title">Telephone:</div>
          <div class="phone__number">+212 528 305 135</div>
       </a>
-   </div>
+   </div> -->
 </div>
     <div class="header__search" data-select2-id="40">
       
@@ -270,6 +270,11 @@
         </a>
         
       </div>
+      <div>
+        Gzenaya auto parts - Bloc 4 N° 45 Agdal Ait Melloul Agadir <br>
+        gzenaya.ae@gmail.com <br>
+        +212 528 305 135
+     </div>
       <!-- <div class="indicator">
         <a href='/newarrivage' class="indicator__button">
           <span class="indicator__icon bi bi-bell h3 notificationicon">
