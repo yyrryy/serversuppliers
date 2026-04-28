@@ -22,59 +22,63 @@
       </a>
       
     </div>
-    <div class="header__navbar">
-   <div class="header__navbar-departments">
-      <div class="departments">
-   <button class="departments__button" type="button">
-      <span class="departments__button-icon">
-         <svg width="16px" height="12px">
-            <path d="M0,7L0,5L16,5L16,7L0,7ZM0,0L16,0L16,2L0,2L0,0ZM12,12L0,12L0,10L12,10L12,12Z"></path>
-         </svg>
-      </span>
-      <span class="departments__button-title">Par categorie</span>
-      <span class="departments__button-arrow">
-         <svg width="9px" height="6px">
-            <path d="M0.2,0.4c0.4-0.4,1-0.5,1.4-0.1l2.9,3l2.9-3c0.4-0.4,1.1-0.4,1.4,0.1c0.3,0.4,0.3,0.9-0.1,1.3L4.5,6L0.3,1.6C-0.1,1.3-0.1,0.7,0.2,0.4z"></path>
-         </svg>
-      </span>
-   </button>
-   <div class="departments__menu">
-      <div class="departments__arrow"></div>
-      <div class="departments__body" style="height: 35em;
-         overflow-y: scroll; width: 20em;">
-         <ul class="departments__list" style="width: 100%;">
-            <li class="departments__list-padding" role="presentation"></li>
-            {% if request.user.client.accesscatalog %}
-            {% for i in pp %}
-            {% if not i.masqueclients %}
-            <li class="departments__item">
-               <a href="/categories/products/{{i.id}}" class="departments__item-link d-flex justify-content-between align-items-center">
-                  <div>
-                     {{i.name}}
+    <div class="header__navbar d-flex justify-content-between" style="background: #016;">
+      <div class="header__navbar-departments">
+          <div class="departments">
+      <button class="departments__button" type="button">
+          <span class="departments__button-icon">
+            <svg width="16px" height="12px">
+                <path d="M0,7L0,5L16,5L16,7L0,7ZM0,0L16,0L16,2L0,2L0,0ZM12,12L0,12L0,10L12,10L12,12Z"></path>
+            </svg>
+          </span>
+          <span class="departments__button-title">Par categorie</span>
+          <span class="departments__button-arrow">
+            <svg width="9px" height="6px">
+                <path d="M0.2,0.4c0.4-0.4,1-0.5,1.4-0.1l2.9,3l2.9-3c0.4-0.4,1.1-0.4,1.4,0.1c0.3,0.4,0.3,0.9-0.1,1.3L4.5,6L0.3,1.6C-0.1,1.3-0.1,0.7,0.2,0.4z"></path>
+            </svg>
+          </span>
+      </button>
+      <div class="departments__menu">
+          <div class="departments__arrow"></div>
+          <div class="departments__body" style="height: 35em;
+            overflow-y: scroll; width: 20em;">
+            <ul class="departments__list" style="width: 100%;">
+                <li class="departments__list-padding" role="presentation"></li>
+                {% if request.user.client.accesscatalog %}
+                {% for i in pp %}
+                {% if not i.masqueclients %}
+                <li class="departments__item">
+                  <a href="/categories/products/{{i.id}}" class="departments__item-link d-flex justify-content-between align-items-center">
+                      <div>
+                        {{i.name}}
+                      </div>
+                      <img src="{% if i.image %} {{i.image.url}} {% endif %}" style="width: 30%;">
+                  </a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                <li class="departments__list-padding" role="presentation"></li>
+            </ul>
+            <div class="departments__menu-container">
+                <div class="megamenu departments__megamenu departments__megamenu--size--xl">
+                  <div class="megamenu__image">
+                      <img src="images/departments/departments-2.jpg" alt="">
                   </div>
-                  <img src="{% if i.image %} {{i.image.url}} {% endif %}" style="width: 30%;">
-               </a>
-            </li>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-            <li class="departments__list-padding" role="presentation"></li>
-         </ul>
-         <div class="departments__menu-container">
-            <div class="megamenu departments__megamenu departments__megamenu--size--xl">
-               <div class="megamenu__image">
-                  <img src="images/departments/departments-2.jpg" alt="">
-               </div>
+                </div>
+                
+                
+                
+                
             </div>
-            
-            
-            
-            
-         </div>
+          </div>
       </div>
-   </div>
-</div>
-   </div>
+    </div>
+      </div>
+      <div class="col-5 mb-2 p-2 d-flex">
+        <input type="text" class="repinput form-control" placeholder="Recherche REPEXPERT">
+        <button class="btn btn-border btn-success" onclick="searchrepexpert()">Chercher</button>
+      </div>
    <!-- <div class="header__navbar-menu">
       <div class="main-menu">
          Gzenaya auto parts - Bloc 4 N° 45 Agdal Ait Melloul Agadir - gzenaya.ae@gmail.com
@@ -86,7 +90,7 @@
          <div class="phone__number">+212 528 305 135</div>
       </a>
    </div> -->
-</div>
+    </div>
     <div class="header__search" data-select2-id="40">
       
       <div class="search" data-select2-id="39"> 
@@ -236,7 +240,7 @@
       <button class="btn text-white" style="background: blue; border-raduis:10px;" onclick="validercmdinheader(event)">Valider</button>
 	</div> -->
       <div class="indicator">
-        <a href="/cart" class="indicator__button shoppingcard">
+        <a href="/cart" class="indicator__button shoppingcard d-flex flex-column align-items-center">
           <span class="indicator__icon" style="fill: white;">
             <svg width="32" height="32">
               <circle cx="10.5" cy="27.5" r="2.5"></circle>
@@ -247,17 +251,17 @@
             </svg>
             <span class="indicator__counter commanditems">0</span>
           </span> <br>
-          Mon panier
-          <span class="indicator__title">
-              <!--<button class="btn btn-danger">x</button>-->
-          </span>
+          <div class="indicator__title">
+            Mon panier
+
+          </div>
 
           <!-- <span class="indicator__value">$250.00</span> -->
         </a>
         
       </div>
       <div class="indicator">
-        <a href='/replicata' class="indicator__button shoppingcard">
+        <a href='/replicata' class="indicator__button shoppingcard d-flex flex-column align-items-center">
           <span class="indicator__icon" style="fill: white;">
             <svg width="32" height="32">
               <path d="M23,4c3.9,0,7,3.1,7,7c0,6.3-11.4,15.9-14,16.9C13.4,26.9,2,17.3,2,11c0-3.9,3.1-7,7-7c2.1,0,4.1,1,5.4,2.6l1.6,2l1.6-2
@@ -266,10 +270,10 @@
               </path>
             </svg>
             <!-- <span class="indicator__counter whishedlist">0</span> -->
-          </span> <br>
-          <span class="indicator__title">
-              mon Compte
           </span>
+          <div class="indicator__title">
+              mon Compte
+          </div>
 
           <!-- <span class="indicator__value">$250.00</span> -->
         </a>
