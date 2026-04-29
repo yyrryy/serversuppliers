@@ -6,9 +6,9 @@
   <div hidden class="clientidholder" clientid="{{user.client.id}}"></div>
   <input type="hidden" class="clientid" name="clientid" value="{{user.client.id}}">
   <input type="hidden" class="cmndfromclient" name="clientid" value="true">
-  <div style="background: #016;" class="text-center text-white p-2">
+  <!-- <div style="background: #016;" class="text-center text-white p-2">
     Gzenaya auto parts - Bloc 4 N° 45 Agdal Ait Melloul Agadir gzenaya.ae@gmail.com +212 528 305 135
-  </div>
+  </div> -->
   <div class="header" data-select2-id="41" style="background: #016;">
     
     <div class="header__logo d-flex">
@@ -236,20 +236,17 @@
     </div>
     <div class="header__indicators" style="border-radius: 4em;">
       
-      <!-- <div class="d-flex flex-column p-2" style="width:12em;">
-	      <input class="form-control transportcmnd" placeholder="Transport" style="border-radius:10px; border-color:blue; height:28px;"/>
-      <button class="btn text-white" style="background: blue; border-raduis:10px;" onclick="validercmdinheader(event)">Valider</button>
-	</div> -->
+      
       <div class="indicator me-5">
-        <a href="/cart" class=" shoppingcard">
-          <span class="" style="fill: white;">
+        <a href="/cart" class=" shoppingcard d-flex flex-column align-items-center text-center">
+          <div class="" style="fill: white;">
             <svg width="32" height="32">
               <circle cx="10.5" cy="27.5" r="2.5"></circle>
               <circle cx="23.5" cy="27.5" r="2.5"></circle>
               <path d="M26.4,21H11.2C10,21,9,20.2,8.8,19.1L5.4,4.8C5.3,4.3,4.9,4,4.4,4H1C0.4,4,0,3.6,0,3s0.4-1,1-1h3.4C5.8,2,7,3,7.3,4.3l3.4,14.3c0.1,0.2,0.3,0.4,0.5,0.4h15.2c0.2,0,0.4-0.1,0.5-0.4l3.1-10c0.1-0.2,0-0.4-0.1-0.4C29.8,8.1,29.7,8,29.5,8H14c-0.6,0-1-0.4-1-1s0.4-1,1-1h15.5c0.8,0,1.5,0.4,2,1c0.5,0.6,0.6,1.5,0.4,2.2l-3.1,10C28.5,20.3,27.5,21,26.4,21z"></path>
             </svg>
             <span class="indicator__counter commanditems">0</span>
-          </span> <br>
+          </div>
           <div class="text-white">
             Mon panier
 
@@ -259,11 +256,11 @@
         </a>
         
       </div>
-      <div class="indicator">
-        <a href="#" class=" shoppingcard">
-          <span style="fill: white;">
+      <div class="indicator me-5">
+        <a href="#" class=" shoppingcard d-flex flex-column align-items-center text-center">
+          <div style="fill: white;">
             <svg width="32" height="32"><path d="M16,18C9.4,18,4,23.4,4,30H2c0-6.2,4-11.5,9.6-13.3C9.4,15.3,8,12.8,8,10c0-4.4,3.6-8,8-8s8,3.6,8,8c0,2.8-1.5,5.3-3.6,6.7C26,18.5,30,23.8,30,30h-2C28,23.4,22.6,18,16,18z M22,10c0-3.3-2.7-6-6-6s-6,2.7-6,6s2.7,6,6,6S22,13.3,22,10z"></path></svg>
-          </span> <br>
+          </div>
           <div class="text-white">
             Mon compte
 
@@ -273,66 +270,27 @@
         </a>
         
       </div>
-      
-      <!-- <div class="indicator">
-        <a href="/cart" class="indicator__button shoppingcard d-flex flex-column align-items-center">
-          <span class="indicator__icon" style="fill: white;">
-            <svg width="32" height="32">
-              <circle cx="10.5" cy="27.5" r="2.5"></circle>
-              <circle cx="23.5" cy="27.5" r="2.5"></circle>
-              <path d="M26.4,21H11.2C10,21,9,20.2,8.8,19.1L5.4,4.8C5.3,4.3,4.9,4,4.4,4H1C0.4,4,0,3.6,0,3s0.4-1,1-1h3.4C5.8,2,7,3,7.3,4.3
-	l3.4,14.3c0.1,0.2,0.3,0.4,0.5,0.4h15.2c0.2,0,0.4-0.1,0.5-0.4l3.1-10c0.1-0.2,0-0.4-0.1-0.4C29.8,8.1,29.7,8,29.5,8H14
-	c-0.6,0-1-0.4-1-1s0.4-1,1-1h15.5c0.8,0,1.5,0.4,2,1c0.5,0.6,0.6,1.5,0.4,2.2l-3.1,10C28.5,20.3,27.5,21,26.4,21z"></path>
-            </svg>
-            <span class="indicator__counter commanditems">0</span>
-          </span> <br>
-          <div class="indicator__title">
-            Mon panier
-
-          </div>
-
-        </a>
-        
-      </div>
       <div class="indicator">
-        <a href='/replicata' class="indicator__button shoppingcard d-flex flex-column align-items-center">
-          <span class="indicator__icon" style="fill: white;">
-            <svg width="32" height="32">
-              <path d="M23,4c3.9,0,7,3.1,7,7c0,6.3-11.4,15.9-14,16.9C13.4,26.9,2,17.3,2,11c0-3.9,3.1-7,7-7c2.1,0,4.1,1,5.4,2.6l1.6,2l1.6-2
-              C18.9,5,20.9,4,23,4 M23,2c-2.8,0-5.4,1.3-7,3.4C14.4,3.3,11.8,2,9,2c-5,0-9,4-9,9c0,8,14,19,16,19s16-11,16-19C32,6,28,2,23,2L23,2
-              z">
-              </path>
-            </svg>
-          </span>
-          <div class="indicator__title">
-              mon Compte
+        <a href="/aboutus" class=" shoppingcard d-flex flex-column align-items-center text-center">
+          <div style="fill: white;">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <!-- Outer circle (outline only) -->
+            <circle cx="16" cy="16" r="14" stroke="white" stroke-width="2"></circle>
+            
+            <!-- Question mark -->
+            <path d="M16 22a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.2-10.5c0-2 1.6-3.5 4.2-3.5 2.4 0 4 1.4 4 3.4 0 1.6-.9 2.6-2.2 3.4-1.2.7-1.6 1.2-1.6 2.3v.5h-2v-.6c0-1.6.7-2.4 2.1-3.2 1.1-.7 1.7-1.3 1.7-2.3 0-1.1-.8-1.8-2-1.8-1.3 0-2.1.8-2.2 2h-2z" fill="white"></path>
+          </svg>
+          </div>
+          <div class="text-white">
+            Aid et contact
+
           </div>
 
+          <!-- <span class="indicator__value">$250.00</span> -->
         </a>
-        
-      </div> -->
+      </div>
       
-      <!-- <div class="indicator">
-        <a href='/newarrivage' class="indicator__button">
-          <span class="indicator__icon bi bi-bell h3 notificationicon">
-            <span class="indicator__counter notificationcount">0</span>
-          </span>
-          
-        </a>
-        <div class="indicator__content">
-          <div class="account-menu">
-            
-            <div class="account-menu__divider"></div>
-            
-            <div class="account-menu__divider"></div>
-            <ul class="account-menu__links notificationlist">
-              
-              
-            </ul>
-            
-          </div>
-        </div>
-      </div> -->
+      
     </div>
     <!-- <div>
       Gzenaya auto parts - Bloc 4 N° 45 Agdal Ait Melloul Agadir <br>
