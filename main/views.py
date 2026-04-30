@@ -80,51 +80,95 @@ def searchrefphone(request):
             else:
                 status="soon"
             if request.user.groups.first().name=='clients':
+                #onclick="{'whishlist(event)'if i.stocktotal <= 0 else 'cmnd(event)'}"> {'Rliquat'if i.stocktotal <= 0 else 'Cmnd'}
                 a+=f"""
-                    <div class="suggestions__item suggestions__product border mb-2 productsbrand{i.mark.id if i.mark else ''} productscategorycat{i.category.id if i.category else ''}">
-                    <div class="suggestions__product-image image image--type--product">
+                    <div class="suggestions__item suggestions__product border mb-2 productsbrand{i.mark.id if i.mark else ''} productscategorycat{i.category.id if i.category else ''} p-2 d-flex align-items-center justify-content-between">
+
+                    <!-- Product Image -->
+                    <div class="suggestions__product-image image image--type--product me-3" style="width:80px;">
                         <div class="image__body">
-                        <a href='/product/{i.id}' terget='_blank'>
-                            <img class="image__tag" src="{i.image.url if i.image else ""}" alt="">
-                        </a>
+                            <a href='/product/{i.id}' terget='_blank'>
+                                <img class="image__tag img-fluid" style="object-fit:contain; height:70px; width:100%;" src="{i.image.url if i.image else ""}" alt="">
+                            </a>
                         </div>
-                    
                     </div>
-                    <div class="suggestions__product-info">
-                        <div class="suggestions__product-name">
-                        <strong class="text-blue">{i.ref.upper()}</strong>  <div class="status {status}"></div><strong 
-                        <strong style="color:red;">{i.refeq1.upper() if i.refeq1 else ''}</strong> <br>
-                        <strong style="color:blue;">{i.refeq2.upper() if i.refeq2 else ''}</strong> <br>
-                        <strong style="color:blue;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
-                        <strong style="color:red;">{i.diametre if i.diametre else ''}</strong> <br>
-                        </div>
-                        <div class="suggestions__product-name"> {i.name} </div>
-                        <div class="d-flex justify-content-between">
-                            
-                            
 
-                            
+                    <!-- Product Info -->
+                    <div class="suggestions__product-info flex-grow-1 px-2">
+
+                        <!-- References -->
+                        <div class="suggestions__product-name small mb-1">
+                            <strong class="text-blue">{i.ref.upper()}</strong>
+                            <span class="status {status} ms-1"></span><br>
+
+                            <strong style="color:red;">{i.refeq1.upper() if i.refeq1 else ''}</strong><br>
+                            <strong style="color:blue;">{i.refeq2.upper() if i.refeq2 else ''}</strong><br>
+                            <strong style="color:blue;">{i.refeq3.upper() if i.refeq3 else ''}</strong>
+                            <strong style="color:red;">{i.diametre if i.diametre else ''}</strong>
                         </div>
-                    
+
+                        <!-- Name -->
+                        <div class="suggestions__product-name fw-semibold text-truncate">
+                            {i.name}
+                        </div>
                     </div>
-                        <div class="d-flex flex-column">
 
-                        <div class="suggestions__product-price text-orange"> 
-                            {i.sellprice} {i.remise if i.remise > 0 else ("NET")}% 
-                        </div>
-                        <div>
-                        <img src="{i.mark.image.url if i.mark and i.mark.image else ''}" width=80>
-                        </div>
-                        <div class="d-flex flex-column mt-auto" style="width: 8vw;">
+                    <!-- Price + Brand -->
+                    <div class="d-flex flex-column align-items-center px-2" style="min-width:100px;">
+                        <div class="d-block w-100 text-primary p-2" style="font-weight: bold;"> 
+    
+                            {f'<img src="{i.mark.image.url}" alt="">' if i.mark and i.mark.image else ''}
 
-                            <div class="cart-table__quantity input-number">
-                            <input style="height: 2.5em;" class="form-control input-number__input qty" type="number" min="1" value="1">
+                            <div class="d-flex justify-content-between">
+                                <div>Pr Brut TTC</div>
+                                <div>{float(i.sellprice):.2f}</div>
                             </div>
-                            <button class="btn btn-success cmnd" pdct="{i.id}" pdctref="{i.ref}" pdctname="{i.name}" pdctpr="{i.sellprice}" pdctid="{i.id}" pdctimg="{ i.image.url if i.image else '' }" pdctremise="{i.remise}" pdctcategory="" onclick="{'whishlist(event)'if i.stocktotal <= 0 else 'cmnd(event)'}">{'Rliquat'if i.stocktotal <= 0 else 'Cmnd'}</button>
-                            <button class="btn btn-info mt-2 d-none anullercmnd" data-id="{i.id}" onclick="anullercmnd(event, '{i.id}')"> Anuller </button>
+
+                            <div class="d-flex justify-content-between">
+                                <div>Remise</div>
+                                <div>{float(i.remise):.2f}</div>
+                            </div>
+
+                            <div class="d-flex justify-content-between" style="color: orange;">
+                                <div>Pr Net</div>
+                                <div>{float(i.prixnet):.2f}</div>
+                            </div>
+
                         </div>
+
+                        <div class="mt-1">
+                            <img src="{i.mark.image.url if i.mark and i.mark.image else ''}" width="60" style="object-fit:contain;">
                         </div>
                     </div>
+
+                    <!-- Actions -->
+                    <div class="d-flex flex-column align-items-end" style="width:110px;">
+
+                        <div class="cart-table__quantity input-number mb-2 w-100">
+                            <input style="height: 2.2em;" class="form-control input-number__input qty text-center" type="number" min="1" value="1">
+                        </div>
+
+                        <button class="btn btn-success cmnd w-100"
+                            pdct="{i.id}"
+                            pdctref="{i.ref}"
+                            pdctname="{i.name}"
+                            pdctpr="{i.sellprice}"
+                            pdctid="{i.id}"
+                            pdctimg="{ i.image.url if i.image else '' }"
+                            pdctremise="{i.remise}"
+                            pdctcategory=""
+                            onclick="cmnd(event)">
+                            Commander
+                        </button>
+
+                        <button class="btn btn-info mt-2 d-none anullercmnd w-100"
+                            data-id="{i.id}"
+                            onclick="anullercmnd(event, '{i.id}')">
+                            Anuller
+                        </button>
+
+                    </div>
+                </div>
                 """
             else:
                 a+=f"""
@@ -232,7 +276,7 @@ def searchrefphone(request):
                         <div class="d-flex flex-column">
 
                         <div class="suggestions__product-price text-orange"> 
-                            {i.sellprice} {i.remise if i.remise > 0 else ("NET")}% 
+                            {i.sellprice} {i.remise if i.remise > 0 else ("NET")}% dd
                         </div>
                         <div>
                         <img src="{i.mark.image.url if i.mark and i.mark.image else ''}" width=80>
@@ -315,7 +359,7 @@ def clientshome(request):
         'marques':marks,
         'promotions':Promotion.objects.order_by('info').exclude(info__startswith='ARRIVAGE').exclude(info=''),
         'arrivage':Promotion.objects.all(),
-        'newproducts':Produit.objects.filter(isnew=True).order_by('category')
+        'newproducts':Produit.objects.filter(isnew=True).order_by('category__code')
     }
     return render(request, 'clientshome.html', ctx)
 

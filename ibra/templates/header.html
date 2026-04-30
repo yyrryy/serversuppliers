@@ -40,11 +40,13 @@
           </span>
       </button>
       <div class="departments__menu">
+        
           <div class="departments__arrow"></div>
           <div class="departments__body" style="height: 35em;
             overflow-y: scroll; width: 20em;">
             <ul class="departments__list" style="width: 100%;">
                 <li class="departments__list-padding" role="presentation"></li>
+                
                 {% if request.user.client.accesscatalog %}
                 {% for i in pp %}
                 {% if not i.masqueclients %}
