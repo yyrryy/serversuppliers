@@ -110,7 +110,7 @@
 
 				</div>-->
 				<div class="block-sale__content" style="background: white;">
-					<div class="block-sale__header">
+					<!-- <div class="block-sale__header">
 					  <div class="block-sale__title">Produits Nouveau arrivage</div>
 					  
 					  <div class="block-sale__controls">
@@ -138,7 +138,7 @@
 						  </div>
 						</div>
 					  </div>
-					</div>
+					</div> -->
 					<div class="block-sale__body">
 					  <div class="decor block-sale__body-decor decor--type--bottom">
 						<div class="decor__body">
@@ -152,7 +152,7 @@
 						<div class="block-sale__carousel">
 							<div class="owl-carousel">
 								{% for i in newproducts %}
-								<a href="/product/{{i.id}}" class="card rounded bg-white d-flex flex-column" style="border: 3px solid; height: 27em;">
+								<a href="/product/{{i.id}}" class="card rounded bg-white d-flex flex-column" style="border: 3px solid black; height: 27em;">
 									
 										<img src="{% if i.image%} {{i.image.url}} {% endif %}" alt="" class="rounded" />
 									
@@ -166,6 +166,22 @@
 								    <!-- <strong class="text-darkblue">{{i.sellprice}} ({% if i.remise > 0 %}{{i.remise}}{%else%}NET{%endif%})</strong> -->
 
 									</div>
+									<div class="d-block w-100 text-primary p-2" style="font-weight: bold;"> 
+										{% if i.mark.image %} <img src="{{i.mark.image.url}}" alt=""> {%endif%}
+										<div class="d-flex justify-content-between">
+										  <div>Pr Brut TTC</div>
+										  <div>{{i.sellprice|floatformat:2}}</div>
+										</div>
+										<div class="d-flex justify-content-between">
+										  <div>Remise</div>
+										  <div>{{i.remise|floatformat:2}}</div>
+										</div>
+										<div class="d-flex justify-content-between" style="color: orange;">
+										  <div>Pr Net</div>
+										  <div>{{i.prixnet|floatformat:2}}</div>
+										</div>
+										
+									  </div>
 									
 								</a>
 								
@@ -305,12 +321,12 @@
 	  <ul class="block-brands__list">
 		{% for i in marques %}
 		<li class="block-brands__item">
-		  <a href="" class="block-brands__item-link">
+		  <div>
 			{% if i.image %}
-			<img src="{{i.image.url}}" alt="">
+			<img src="{{i.image.url}}" alt="" style="max-width: 100%;">
 			{% endif %}
 			<span class="block-brands__item-name">{{i.name}}</span>
-		  </a>
+		  </div>
 		</li>
 		{%endfor%}
 		

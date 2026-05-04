@@ -864,7 +864,19 @@
     <script src="/static/js/moment.js"></script>
     <script src="/static/js/datepicker.js"></script>
     <script>
-      
+      function searchctg(event) {
+          var query = $(event.target).val().toLowerCase();
+
+          $('.departments__item').each(function() {
+              var text = $(this).text().toLowerCase();
+
+              if (text.indexOf(query) > -1) {
+                  $(this).show();
+              } else {
+                  $(this).hide();
+              }
+          });
+      }
       function displayimage(event, imgsrc){
         $('.imgproductmodal').attr("src", imgsrc)
       }

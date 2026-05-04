@@ -45,6 +45,7 @@
           <div class="departments__body" style="height: 35em;
             overflow-y: scroll; width: 20em;">
             <ul class="departments__list" style="width: 100%;">
+              <input type="text" class="form-control" name="" id="" placeholder="chercher..." onkeyup="searchctg(event)">
                 <li class="departments__list-padding" role="presentation"></li>
                 
                 {% if request.user.client.accesscatalog %}
