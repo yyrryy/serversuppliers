@@ -73,7 +73,7 @@
             <div class="products-list__content px-2">
               
               {% for i in products %}
-              <div class="products-list__item rounded mb-3 w-100" style="border: 1px solid gray;">
+              <div class="products-list__item rounded w-100" style="border: 1px solid gray;">
                 <div class="product-card">
                   <!-- <div class="product-card__actions-list">
                     <button class="product-card__action product-card__action--wishlist" type="button" aria-label="Add to wish list">
@@ -180,7 +180,7 @@
                 <button class="btn btn-outline-primary">
                   {% if previousctg %}
                   <a href="/categories/products/{{previousctg.id}}">
-                    Previous
+                    Precedent
                   </a>
                   
                   {% endif %}
@@ -188,7 +188,7 @@
                 <button class="btn btn-outline-primary">
                   {% if nextctg %}
                   <a href="/categories/products/{{nextctg.id}}">
-                    Next
+                    Suivant
                   </a>
                   {% endif %}
                 </button>
