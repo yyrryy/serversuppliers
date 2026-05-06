@@ -148,11 +148,11 @@
 						</div>
 					  </div>
 					  <div class="block-sale__image" style="background-image: url('images/sale-1903x640.jpg');"></div>
-					  <div class="">
+					  <div class="mb-2">
 						<div class="block-sale__carousel">
 							<div class="owl-carousel">
 								{% for i in newproducts %}
-								<a href="/product/{{i.id}}" class="card rounded bg-white d-flex flex-column" style="height: 30em;">
+								<a href="/product/{{i.id}}" class="card rounded bg-white d-flex flex-column" style="height: 33em;">
 									
 										<img src="{% if i.image%} {{i.image.url}} {% endif %}" alt="" class="rounded" />
 									
