@@ -139,7 +139,7 @@
 						</div>
 					  </div>
 					</div> -->
-					<div class="block-sale__body">
+					<div class="">
 					  <div class="decor block-sale__body-decor decor--type--bottom">
 						<div class="decor__body">
 						  <div class="decor__start"></div>
@@ -152,7 +152,7 @@
 						<div class="block-sale__carousel">
 							<div class="owl-carousel">
 								{% for i in newproducts %}
-								<a href="/product/{{i.id}}" class="card rounded bg-white d-flex flex-column" style="height: 37em;">
+								<a href="/product/{{i.id}}" class="card rounded bg-white d-flex flex-column" style="height: 30em;">
 									
 										<img src="{% if i.image%} {{i.image.url}} {% endif %}" alt="" class="rounded" />
 									
@@ -190,8 +190,27 @@
 					  </div>
 					</div>
 				  </div>
-				<div class="header__navbar d-flex justify-content-between" style="background: #016; height:3em;">
-					category
+				<div class="p-2 text-white" style="background: #016; height:3em;">
+					categories
+				</div>
+				<!-- carousel of categories -->
+				<div>
+					<div class="owl-carousel">
+						{% for i in categories %}
+						<a href="/categories/products/{{i.id}}" class="card rounded bg-white d-flex flex-column p-2" style="height: 10em;">
+							
+								<img src="{% if i.image%} {{i.image.url}} {% endif %}" alt="" class="rounded" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+							
+						  <div class="p-2">
+						    
+						    <strong class="card-text text-darkblue">{{i.name}}</strong>
+						    
+							</div>
+							
+						</a>
+						
+						{% endfor %}
+					</div>
 				</div>
 				<!-- {% for i in products %}
 			
