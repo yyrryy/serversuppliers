@@ -644,13 +644,11 @@
 
       <!-- Price -->
       <div class="price-section">
-        {% if product.remise != 0 %}
+        
         <span class="price-current">{{ product.sellprice|floatformat:2 }} DH</span>
         <span class="price-discount">-{{ product.remise }}%</span>
-        {% else %}
         <span class="price-current">{{ product.prixnet|floatformat:2 }} DH</span>
         <span class="price-label">Prix NET</span>
-        {% endif %}
       </div>
 
       <!-- Specs -->
