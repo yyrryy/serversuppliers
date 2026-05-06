@@ -264,7 +264,7 @@ $('[name=category]').on('change',() => {
                             pr=$(el).attr('pdctpr')
                             id=$(el).attr('pdctid')
                             // get nearest item
-                            let qty = $(el).parent().find('.input-number > .input-number__input').val()
+                            let qty = $(el).parent().find('.input-number__input').val()
                             // add new row to coommand table
                             addcmnd(name, ref, qty, pr, id)
                             // update total

@@ -949,7 +949,7 @@
             min=$(event.target).attr('pdctremise')
             // get nearest item
             console.log($(event.target).parent())
-            let qty = $(event.target).parent().find('.input-number > .input-number__input').val()
+            let qty = $(event.target).parent().find('.input-number__input').val()
             // add new row to coommand table
             console.log({'productid':id, 'qty':qty})
             if (qty!=''){
@@ -978,7 +978,7 @@
             //min is remise
             min=$(event.target).attr('pdctremise')
             // get nearest item
-            let qty = $(event.target).parent().find('.input-number > .input-number__input').val()
+            let qty = $(event.target).parent().find('.input-number__input').val()
             // add new row to coommand table
             console.log({'productid':id, 'qty':qty})
             if (qty!=''){
