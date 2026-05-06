@@ -647,8 +647,7 @@
         
         <span class="price-current">{{ product.sellprice|floatformat:2 }} DH</span>
         <span class="price-discount">-{{ product.remise }}%</span>
-        <span class="price-current">{{ product.prixnet|floatformat:2 }} DH</span>
-        <span class="price-label">Prix NET</span>
+        <div class="price-current" style="font-size: 19px; color: orange;">{{ product.prixnet|floatformat:2 }} DH prix net</div>
       </div>
 
       <!-- Specs -->
@@ -688,7 +687,7 @@
       <!-- Add to Cart -->
       <div class="cart-section">
         <div class="quantity-row">
-          <div class="quantity-input input-number">
+          <div class="quantity-input">
             <button type="button" class="qty-minus">-</button>
             <input 
               type="number" 
@@ -708,6 +707,7 @@
             pdctimg="{{ product.image }}" 
             pdctremise="{{ product.remise|floatformat:-2 }}" 
             pdctcategory="{{ product.category.title }}"
+            style="background: #198754;"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="9" cy="21" r="1"/>
