@@ -136,9 +136,7 @@ def searchrefphone(request):
 
                         </div>
 
-                        <div class="mt-1">
-                            <img src="{i.mark.image.url if i.mark and i.mark.image else ''}" width="60" style="object-fit:contain;">
-                        </div>
+                       
                     </div>
 
                     <!-- Actions -->
