@@ -48,7 +48,6 @@
               <input type="text" class="form-control" name="" id="" placeholder="chercher..." onkeyup="searchctg(event)">
                 <li class="departments__list-padding" role="presentation"></li>
                 
-                {% if request.user.client.accesscatalog %}
                 {% for i in pp %}
                 {% if not i.masqueclients %}
                 <li class="departments__item">
@@ -61,7 +60,6 @@
                 </li>
                 {% endif %}
                 {% endfor %}
-                {% endif %}
                 <li class="departments__list-padding" role="presentation"></li>
             </ul>
             <div class="departments__menu-container">
