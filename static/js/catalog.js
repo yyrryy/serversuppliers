@@ -222,6 +222,7 @@ $('.cmnd').each((i, el)=>{
         console.log(name, ctg, ref, qty, pr, id, img, min)
         // add new row to coommand table
         if (qty!=''){
+            $(el).removeClass('bi-cart-plus').addClass('bi-check-circle')
             //addcmnd(name, ctg, ref, qty, pr, id, img, min)
             $.get('/addtocart', {'productid':id, 'qty':qty}, (data)=>{
                 if (!data.success){

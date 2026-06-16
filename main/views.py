@@ -75,10 +75,12 @@ def searchrefphone(request):
         for i in products:
             if i.stocktotal<=0:
                 status="indisponible"
-            elif i.stocktotal>=5:
-                status="disponible"
             else:
-                status="soon"
+                status="disponible"
+            # elif i.stocktotal>=5:
+            #     status="disponible"
+            # else:
+            #     status="soon"
             if request.user.groups.first().name=='clients':
                 #onclick="{'whishlist(event)'if i.stocktotal <= 0 else 'cmnd(event)'}"> {'Rliquat'if i.stocktotal <= 0 else 'Cmnd'}
                 a+=f"""
@@ -238,10 +240,8 @@ def searchrefphone(request):
         for i in products:
             if i.stocktotal<=0:
                 status="indisponible"
-            elif i.stocktotal>=5:
-                status="disponible"
             else:
-                status="soon"
+                status="disponible"
             # <img src="{i.carlogos.image.url if i.carlogos and i.carlogos.image else ''}" width="40" style="width:40px;">
             if request.user.groups.first().name=='clients':
                 a+=f"""
@@ -1240,10 +1240,9 @@ def getitemsincart(request):
         for i in items:
             if i.product.stocktotal<=0:
                 status="indisponible"
-            elif i.product.stocktotal>=5:
-                status="disponible"
             else:
-                status="soon"
+                status="disponible"
+            
             itemscart.append({
                 'cartid':cart.id,
                 'cartitemid':i.id,
@@ -1357,10 +1356,9 @@ def getitemsinwishlist(request):
         for i in items:
             if i.product.stocktotal<=0:
                 status="indisponible"
-            elif i.product.stocktotal>=5:
-                status="disponible"
             else:
-                status="soon"
+                status="disponible"
+            
             itemswich.append({
                 'wichid':wich.id,
                 'wichitemid':i.id,

@@ -224,6 +224,7 @@ $('.cmnd').each((i, el)=>{
         if (qty!=''){
             //addcmnd(name, ctg, ref, qty, pr, id, img, min)
             $.get('/addtocart', {'productid':id, 'qty':qty}, (data)=>{
+                $(el).removeClass('bi-cart-plus').addClass('bi-check-circle')
                 if (!data.success){
                     alertify.error(data.message)
                 }else{
