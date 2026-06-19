@@ -27,7 +27,7 @@ SYNC_TOKEN = '8a7f5b2c9d3e4f1g0h6j'  # random, long, secret
 #DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 DEBUG = True
 print('>>>>>>>>', DEBUG)
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['stegzenaya.com', 'www.stegzenaya.com', '134.209.226.177', 'localhost']
 CSRF_TRUSTED_ORIGINS = ['https://stegzenaya.com', 'https://www.stegzenaya.com']
 # Application definition
 
