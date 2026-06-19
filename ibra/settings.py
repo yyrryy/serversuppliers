@@ -28,7 +28,7 @@ SYNC_TOKEN = '8a7f5b2c9d3e4f1g0h6j'  # random, long, secret
 DEBUG = True
 print('>>>>>>>>', DEBUG)
 ALLOWED_HOSTS = ['stegzenaya.com', 'www.stegzenaya.com', '134.209.226.177', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['https://stegzenaya.com', 'https://www.stegzenaya.com']
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -117,7 +117,7 @@ else:
         }
     }
 
-CSRF_TRUSTED_ORIGINS=['https://gzenaya.ma', 'http://134.209.226.177', 'http://localhost', 'http://192.168.1.35']
+CSRF_TRUSTED_ORIGINS=['https://stegzenaya.com', 'https://www.stegzenaya.com', 'http://134.209.226.177', 'http://localhost', 'http://192.168.1.35']
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
