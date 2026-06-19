@@ -28,7 +28,7 @@ SYNC_TOKEN = '8a7f5b2c9d3e4f1g0h6j'  # random, long, secret
 DEBUG = False
 print('>>>>>>>>', DEBUG)
 ALLOWED_HOSTS = ['*']
-TRUSTED_HOSTS = ['stegzenaya.com', 'www.stegzenaya.com']
+CSRF_TRUSTED_ORIGINS = ['https://stegzenaya.com', 'https://www.stegzenaya.com']
 # Application definition
 
 INSTALLED_APPS = [
