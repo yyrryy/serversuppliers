@@ -566,25 +566,25 @@ def commande(request):
                     diff = int(i.qty) - int(i.product.stocktotal)
                     # commande = 10 stock = 6, dispo 6(stock) reliquat diff = 4
                     if diff > 0:
-                        totalofdispounible+=round(i.product.sellprice * i.product.stocktotal, 2)
+                        totalofdispounible+=round(i.product.prixnet * i.product.stocktotal, 2)
                         item={
                             'ref':i.product.ref,
                             'name':i.product.name,
                             'qty':i.product.stocktotal,
                             'price':i.product.sellprice,
-                            'total':round(i.product.sellprice * i.qty, 2),
+                            'total':round(i.product.prixnet * i.product.stocktotal, 2),
                             'remise':i.product.remise,
                             'productid':i.product.id,
                             'uniqcode':i.product.uniqcode
                         }
                         itemsdisponible.append(item)
-                        totalofnotdispounible+=round(i.product.sellprice * diff, 2)
+                        totalofnotdispounible+=round(i.product.prixnet * diff, 2)
                         item={
                             'ref':i.product.ref,
                             'name':i.product.name,
                             'qty':diff,
                             'price':i.product.sellprice,
-                            'total':round(i.product.sellprice * diff, 2),
+                            'total':round(i.product.prixnet * diff, 2),
                             'remise':i.product.remise,
                             'uniqcode':i.product.uniqcode,
                             'productid':i.product.id,
@@ -592,7 +592,7 @@ def commande(request):
                         itemsnotdisponible.append(item)
                     # else c = 3 or c = 6 and dispo = 6 means the c in stock
                     else:
-                        totalofdispounible+=round(i.product.sellprice * i.qty, 2)
+                        totalofdispounible+=round(i.product.prixnet * i.qty, 2)
                         item={
                             'ref':i.product.ref,
                             'name':i.product.name,
@@ -615,25 +615,25 @@ def commande(request):
                     diff = int(i.qty) - int(i.product.stocktotal)
                     # commande = 10 stock = 6, dispo 6(stock) reliquat diff = 4
                     if diff > 0:
-                        totalofdispounible+=round(i.product.sellprice * i.product.stocktotal, 2)
+                        totalofdispounible+=round(i.product.prixnet * i.product.stocktotal, 2)
                         item={
                             'ref':i.product.ref,
                             'name':i.product.name,
                             'qty':i.product.stocktotal,
                             'price':i.product.sellprice,
-                            'total':round(i.product.sellprice * i.qty, 2),
+                            'total':round(i.product.prixnet * i.stocktotal, 2),
                             'remise':i.product.remise,
                             'productid':i.product.id,
                             'uniqcode':i.product.uniqcode
                         }
                         itemsdisponible.append(item)
-                        totalofnotdispounible+=round(i.product.sellprice * diff, 2)
+                        totalofnotdispounible+=round(i.product.prixnet * diff, 2)
                         item={
                             'ref':i.product.ref,
                             'name':i.product.name,
                             'qty':diff,
                             'price':i.product.sellprice,
-                            'total':round(i.product.sellprice * diff, 2),
+                            'total':round(i.product.prixnet * diff, 2),
                             'remise':i.product.remise,
                             'uniqcode':i.product.uniqcode,
                             'productid':i.product.id,
@@ -641,13 +641,13 @@ def commande(request):
                         itemsnotdisponible.append(item)
                     # else c = 3 or c = 6 and dispo = 6 means the c in stock
                     else:
-                        totalofdispounible+=round(i.product.sellprice * i.qty, 2)
+                        totalofdispounible+=round(i.product.prixnet * i.qty, 2)
                         item={
                             'ref':i.product.ref,
                             'name':i.product.name,
                             'qty':i.qty,
                             'price':i.product.sellprice,
-                            'total':round(i.product.sellprice * i.qty, 2),
+                            'total':round(i.product.prixnet * i.qty, 2),
                             'remise':i.product.remise,
                             'productid':i.product.id,
                             'uniqcode':i.product.uniqcode
@@ -656,13 +656,13 @@ def commande(request):
                     i.delete()
                 # else stock is 0 commande should be reliquat
                 else:
-                    totalofnotdispounible+=round(i.product.sellprice * i.qty, 2)
+                    totalofnotdispounible+=round(i.product.prixnet * i.qty, 2)
                     item={
                         'ref':i.product.ref,
                         'name':i.product.name,
                         'qty':i.qty,
                         'price':i.product.sellprice,
-                        'total':round(i.product.sellprice * i.qty, 2),
+                        'total':round(i.product.prixnet * i.qty, 2),
                         'remise':i.product.remise,
                         'uniqcode':i.product.uniqcode,
                         'productid':i.product.id,
