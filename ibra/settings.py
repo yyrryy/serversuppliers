@@ -25,8 +25,7 @@ SYNC_TOKEN = '8a7f5b2c9d3e4f1g0h6j'  # random, long, secret
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = os.environ.get('DEBUG', 'False') == 'True'
-DEBUG = False
-print('>>>>>>>>', DEBUG)
+DEBUG = True
 ALLOWED_HOSTS = ['stegzenaya.com', 'www.stegzenaya.com', '134.209.226.177', 'localhost']
 
 # Application definition

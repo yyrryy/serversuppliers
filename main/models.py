@@ -283,7 +283,7 @@ class Represent(models.Model):
     caneditprice=models.BooleanField(default=False)
     info=models.TextField(default=None, null=True, blank=True)
     # the currennt client the rep is working with
-    client=models.ForeignKey(Client, on_delete=models.SET_NULL, default=None, null=True, related_name='workingclient')
+    client=models.ForeignKey(Client, on_delete=models.SET_NULL, default=None, null=True, related_name='workingclient', blank=True)
     # wether the products will be displaied in owlcarousel or not
     slides=models.BooleanField(default=True)
     def __str__(self) -> str:
