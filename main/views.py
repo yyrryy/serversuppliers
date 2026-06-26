@@ -621,7 +621,7 @@ def commande(request):
                             'name':i.product.name,
                             'qty':i.product.stocktotal,
                             'price':i.product.sellprice,
-                            'total':round(i.product.prixnet * i.stocktotal, 2),
+                            'total':round(i.product.prixnet * i.product.stocktotal, 2),
                             'remise':i.product.remise,
                             'productid':i.product.id,
                             'uniqcode':i.product.uniqcode
