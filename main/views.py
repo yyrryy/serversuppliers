@@ -609,7 +609,7 @@ def commande(request):
                 #     totalofnotdispounible+=i.total
                 cart.total=0
                 cart.save()
-                
+            # rep 4aydowz commande
             else:
                 if i.product.stocktotal>0:
                     diff = int(i.qty) - int(i.product.stocktotal)
@@ -627,6 +627,7 @@ def commande(request):
                             'uniqcode':i.product.uniqcode
                         }
                         itemsdisponible.append(item)
+                        # difference in reliquat
                         totalofnotdispounible+=round(i.product.prixnet * diff, 2)
                         item={
                             'ref':i.product.ref,
@@ -671,11 +672,11 @@ def commande(request):
                     i.delete()
                 cart.total=0
                 cart.save()
-        if request.user.groups.first().name=='clients' and totalofdispounible == 0:
-            return JsonResponse({
-                'valid':False,
-                'message': 'Stock null panier'
-            })
+        # if request.user.groups.first().name=='clients' and totalofdispounible == 0:
+        #     return JsonResponse({
+        #         'valid':False,
+        #         'message': 'Stock null panier'
+        #     })
         notesorder=request.POST.get('notesorder')
         cmndfromclient=request.POST.get('cmndfromclient')
         if cmndfromclient == 'true':
@@ -683,7 +684,7 @@ def commande(request):
             for i in itemsdisponible:
                 Orderitem.objects.create(order=order, ref=i['ref'], name=i['name'], qty=int(i['qty']), product_id=i['productid'], remise=i['remise'], price=i['price'], total=i['total'])
             if len(itemsnotdisponible)>0:
-                reliquatorder=Order.objects.create(client=client, salseman=client.represent,  modpymnt='--', modlvrsn='--',total=totalofdispounible, isclientcommnd=True, note=notesorder+' Reliquat', senttoserver=False)
+                reliquatorder=Order.objects.create(client=client, salseman=client.represent,  modpymnt='--', modlvrsn='--',total=totalofnotdispounible, isclientcommnd=True, note=notesorder+' Reliquat', senttoserver=False)
                 for i in itemsnotdisponible:
                     Orderitem.objects.create(order=reliquatorder, ref=i['ref'], name=i['name'], qty=int(i['qty']), product_id=i['productid'], remise=i['remise'], price=i['price'], total=i['total'])
             # try:
