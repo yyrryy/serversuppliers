@@ -607,7 +607,7 @@ def commande(request):
                     i.delete()
                 # else:
                 #     totalofnotdispounible+=i.total
-                cart.total=totalofnotdispounible
+                cart.total=0
                 cart.save()
                 
             else:
